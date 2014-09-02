@@ -141,16 +141,45 @@ $app->group('/api/v1', function() use ($app) {
 				echo prepare_json_output($results);
 			});
 
-		$app->get('/reports/:report', function($report) use ($app) {
+		$app->get('/reports/istep_corporations', function() use ($app) {
 				$db = $app->config('db.handle');
 
-				switch($report) {
-				case 'istep_corporations': $q = $db->prepare('SELECT * FROM indianalearns.report_istep_corporations'); break;
-				default: $app->halt(404, prepare_json_output(array('error'=>"unable to find report: `$report`"))); break;
+				$sql = 'SELECT * FROM indianalearns.report_istep_corporations';
+				$sql_clauses = array();
+				$sql_params = array();
+
+				$corp_id = $app->request->params('corp_id');
+				if(!empty($corp_id)) {
+					$sql_params['corp_id'] = $corp_id;
+					$sql_clauses[] = 'corp_id = :corp_id';
 				}
 
+				$corp_name = $app->request->params('corp_name');
+				if(!empty($corp_name)) {
+					$sql_params['corp_name'] = $corp_name;
+					$sql_clauses[] = 'corp_name LIKE `%:corp_name%`';
+				}
+
+				$group = $app->request->params('group');
+				if(!empty($group)) {
+					$sql_params['group'] = $group;
+					$sql_clauses[] = '`report_istep_corporations.group` LIKE `%:group%`';
+				}
+
+				$year = $app->request->params('year');
+				if(!empty($year)) {
+					$sql_params['year'] = $year;
+					$sql_clauses[] = 'year = :year';
+				}
+
+				if(!empty($sql_clauses)) {
+					$sql .= ' WHERE ';
+					$sql .= implode(' AND ', $sql_clauses);
+				}
+
+				$q = $db->prepare($sql);
 				$q->setFetchMode(PDO::FETCH_ASSOC);
-				$q->execute();
+				$q->execute($sql_params);
 
 				$results = array();
 				while($row = $q->fetch()) {
