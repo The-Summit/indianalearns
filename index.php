@@ -17,21 +17,26 @@ $app = new \Slim\Slim(array(
 ));
 
 $app->get('/', function () use ($app) {
-	$app->redirect('/home/');
-});
+		$app->redirect('/home/');
+	});
 $app->group('/home', 'prepForHumans', function() use ($app){
-	$app->get('/', function () use ($app){
-		$id = "home";
-		makePage($app,$id);
+		$app->get('/', function () use ($app){
+				$id = "home";
+				makePage($app,$id);
+			});
+		$app->get('/:id', function ($id) use ($app) {
+				makePage($app,$id);
+			});
+		$app->get('/demos/:id', function ($id) use ($app) {
+				makePage($app,$id);
+			});
 	});
-	$app->get('/:id', function ($id) use ($app) {
-		makePage($app,$id);
-	});
-});
-
 $app->group('/api/v1', function() use ($app) {
 		// all api output is JSON
 		$app->response->headers->set('Content-Type', 'application/json;charset=utf8');
+		
+		// allow requests from all origins
+		$app->response->headers->set('Access-Control-Allow-Origin', '*');
 
 		// set the 404 / route not found handler to something that won't try to output HTML
 		$app->notFound(function() use ($app) {
@@ -69,6 +74,12 @@ $app->group('/api/v1', function() use ($app) {
 
 				$results = array();
 				while($row = $q->fetch()) {
+					$row['gis_url'] = 
+						'http://maps.indiana.edu/arcgis/rest/services/Infrastructure'
+						.'/Schools_Districts_2013_USCB/Mapserver/0/query'
+						.'?text='.str_replace(' ', '+', $row['name'])
+						.'&f=json';
+					
 					array_push($results, $row);
 				}
 
@@ -78,41 +89,73 @@ $app->group('/api/v1', function() use ($app) {
 		$app->get('/schools(/(:id))', function($id=null) use ($app) {
 				$db = $app->config('db.handle');
 
-				if($id == null) {
-					$q = $db->prepare('SELECT * FROM indianalearns.directory_schools');
-					$q->setFetchMode(PDO::FETCH_ASSOC);
-					$q->execute();
-				} else {
-					$q = $db->prepare('SELECT * FROM indianalearns.directory_schools WHERE id = ?');
-					$q->setFetchMode(PDO::FETCH_ASSOC);
-					$q->execute(array($id));
+				$sql = 'SELECT * FROM indianalearns.directory_schools';
+
+				if($id != null) {
+					$sql .= ' WHERE id = :id';
 				}
-				
+
+				$sql .= ' LIMIT :offset,:limit';
+				$q = $db->prepare($sql);
+				$q->setFetchMode(PDO::FETCH_ASSOC);
+
+				$limit = $app->request->params('limit');
+				$offset = $app->request->params('offset');
+				if(empty($limit)) {
+					$limit = 100;
+				}
+				if(empty($offset)) {
+					$offset = 0;
+				}
+				$q->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
+				$q->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+
+				if($id) {
+					$q->bindValue(':id', (int) $id, PDO::PARAM_INT);
+				}
+
+				$q->execute();
+								
 				$results = array();
 				while($row = $q->fetch()) {
+					// add a link to the arcgis service at maps.indiana.edu
+					$row['gis_url'] = 
+						'http://maps.indiana.edu/arcgis/rest/services/Infrastructure'
+						.'/Schools_IDOE/Mapserver/0/query'
+						.'?text='.str_replace(' ', '+', strtoupper($row['name']))
+						.'&f=json';
 					array_push($results, $row);
 				}
 
 				echo prepare_json_output($results);
 			});
 
-		$app->get('/reports/istep_corporations', function() use ($app) {
+		$app->get('/reports/:report', function($report) use ($app) {
+				if(
+					'istep_corporations'   === $report ||
+					'istep_schools_public' === $report 
+				) {
+					$table = 'report_'.$report;
+				} else {
+					$app->halt(404, array('error'=>
+					                      array('code'=>404,
+					                            'message'=>'the requested resource could not be found')));
+				}
+				
 				$db = $app->config('db.handle');
 
-				// get the list of queryable fields for this report
-				//$sql = 'SELECT report_column, field_type, operations, id_table FROM indianalearns.meta_report_queryables WHERE report_id = 4;';
 				$sql = 'SELECT'
 					.'   COLUMN_NAME,'
 					.'   DATA_TYPE,'
 					.'   COLUMN_COMMENT'
 					.'  FROM information_schema.COLUMNS'
 					.'  WHERE TABLE_SCHEMA = \'indianalearns\''
-					.'    AND TABLE_NAME = \'report_istep_corporations\'';
+					.'    AND TABLE_NAME = \''.$table.'\'';
 				$q = $db->prepare($sql);
 				$q->execute();
 
-				// prepare to assemble our actual query
-				$sql = 'SELECT * FROM indianalearns.report_istep_corporations';
+				// begin to assemble our actual query
+				$sql = 'SELECT * FROM indianalearns.'.$table;
 				$sql_clauses = array();
 				$sql_params = array();
 
@@ -132,10 +175,31 @@ $app->group('/api/v1', function() use ($app) {
 					$sql .= ' WHERE ';
 					$sql .= implode(' AND ', $sql_clauses);
 				}
-
+				$sql .= ' LIMIT :offset,:limit';
+				// $sql is now complete
+				
+				// prepare query object and start binding values
 				$q = $db->prepare($sql);
 				$q->setFetchMode(PDO::FETCH_ASSOC);
-				$q->execute($sql_params);
+
+				// set default offset/limit values
+				$limit = $app->request->params('limit');
+				$offset = $app->request->params('offset');
+				if(empty($limit)) {
+					$limit = 500;
+				}
+				if(empty($offset)) {
+					$offset = 0;
+				}
+				$q->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
+				$q->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+
+				// bind specific user parameters
+				foreach($sql_params as $key=>$value) {
+					$q->bindValue(':'.$key, $value);
+				}
+
+				$q->execute();
 
 				$results = array();
 				while($row = $q->fetch()) {
