@@ -91,7 +91,14 @@ $app->group('/api/v1', function() use ($app) {
 				$db = $app->config('db.handle');
 
 				// get the list of queryable fields for this report
-				$sql = 'SELECT report_column, field_type, operations, id_table FROM indianalearns.meta_report_queryables WHERE report_id = 4;';
+				//$sql = 'SELECT report_column, field_type, operations, id_table FROM indianalearns.meta_report_queryables WHERE report_id = 4;';
+				$sql = 'SELECT'
+					.'   COLUMN_NAME,'
+					.'   DATA_TYPE,'
+					.'   COLUMN_COMMENT'
+					.'  FROM information_schema.COLUMNS'
+					.'  WHERE TABLE_SCHEMA = \'indianalearns\''
+					.'    AND TABLE_NAME = \'report_istep_corporations\'';
 				$q = $db->prepare($sql);
 				$q->execute();
 
@@ -103,7 +110,7 @@ $app->group('/api/v1', function() use ($app) {
 				// iterate over queryable fields
 				while($row = $q->fetch()) {
 					// see if the request included a parameter matching this queryable field
-					$col = $row['report_column'];
+					$col = $row['COLUMN_NAME'];
 					$request_field = $app->request->params($col);
 					if(!empty($request_field)) {
 						// TODO: test for comparison operators, >, >=, etc
