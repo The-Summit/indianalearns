@@ -115,7 +115,7 @@ $app->group('/api/v1', function() use ($app) {
 					if(!empty($request_field)) {
 						// TODO: test for comparison operators, >, >=, etc
 						$sql_params[$col] = $request_field;    // $sql_params['corp_id'] = $app->request->params('corp_id');
-						$sql_clauses[]= $col . ' = :' . $col;  // something like 'corp_id = :corp_id'
+						$sql_clauses[]= '`' . $col . '`' . ' = :' . $col;  // something like 'corp_id = :corp_id'
 					}
 				}
 
