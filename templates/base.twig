@@ -1,0 +1,15 @@
+{% block head %}
+	{% include 'head.twig' %}
+{% endblock %}
+	<body class="" data-source="{% block source %}base.twig{% endblock %}">
+		{% block nav %}
+			{% include 'nav.twig' %}
+		{% endblock %}
+		{% block content %}
+				<h1>Hello!</h1>
+		{% endblock %}
+		<footer id="footer">
+			{% include 'footer.twig' %}
+		</footer>
+    </body>
+</html>
