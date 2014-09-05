@@ -1,0 +1,14 @@
+h1{
+	font-family: "Raleway", Helvetica;
+	text-transform: uppercase;
+	font-weight: 700;	
+}
+h2,h3,h4,h5,h6,p{
+	font-family: "Cabin", Helvetica;
+	text-transform: none;	
+	font-weight: 400;
+}
+.jumbotron{
+	background-color: #3B6D8C;
+	color: #f2f2f2;
+}

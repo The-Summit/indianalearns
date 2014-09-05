@@ -4,6 +4,8 @@
 	"slim/views": "0.1.*",
 
 	"twig/twig": "1.*",
-	"twbs/bootstrap" : ">=3.2.0"
+	"twbs/bootstrap" : ">=3.2.0",
+	"aptoma/twig-markdown": "1.0.0",
+	"michelf/php-markdown": "1.4.1"
     }
 }
