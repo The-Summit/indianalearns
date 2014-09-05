@@ -17,8 +17,16 @@ $app = new \Slim\Slim(array(
 ));
 
 $app->get('/', function () use ($app) {
-	$app->response->headers->set('Content-Type', 'text/html;charset=utf8');
-	$app->render("index.twig");
+	$app->redirect('/home/');
+});
+$app->group('/home', 'prepForHumans', function() use ($app){
+	$app->get('/', function () use ($app){
+		$id = "home";
+		makePage($app,$id);
+	});
+	$app->get('/:id', function ($id) use ($app) {
+		makePage($app,$id);
+	});
 });
 
 $app->group('/api/v1', function() use ($app) {

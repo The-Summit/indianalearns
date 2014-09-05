@@ -1,0 +1,9 @@
+{% extends "base.twig" %}
+{% block content %}
+{{ jumbo.jumbotron(title) }}
+<div class="container-fluid {{page}}-content">
+	{% markdown %}
+		{{body}}
+	{% endmarkdown %}
+</div>
+{% endblock %}

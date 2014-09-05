@@ -1,0 +1,27 @@
+{% extends "base.twig" %}
+{% block content %}
+{{ jumbo.jumbotron(title) }}
+<div class="container-fluid trifecta">
+	<div class="col-xs-12 col-sm-4">
+		<a href="demos">
+			<span class="glyphicon glyphicon-eye-open"></span>
+			<h3>Demos</h3>
+		</a>
+		<p class="col-xs-10 col-xs-offset-1">We've created a few different tools using our <a href="/home/docs">API</a>. Take a look around and <a href="https://github.com/The-Summit/indianalearns">fork us on GitHub</a> if you'd like to contribute!</p>
+	</div>
+	<div class="col-xs-12 col-sm-4">
+		<a href="docs">
+			<span class="glyphicon glyphicon-cloud"></span>
+			<h3>API</h3>
+		</a>
+		<p class="col-xs-10 col-xs-offset-1">Developers: Take a look at this.  We've attempted to make our API simple to get started.</p>
+	</div>
+	<div class="col-xs-12 col-sm-4">
+		<a href="downloads">
+			<span class="glyphicon glyphicon-floppy-save"></span>
+			<h3>Download</h3>
+		</a>
+		<p class="col-xs-10 col-xs-offset-1">Need to take the datasets camping? More comfortable hacking your way through Excel charts? Take a look at our downloadable datasets here.</p>
+	</div>
+</div>
+{% endblock %}
