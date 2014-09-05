@@ -16,9 +16,10 @@ $app = new \Slim\Slim(array(
 	'view' => new \Slim\Views\Twig()
 ));
 
-$app->get('/', function () {
-		echo "Hello, user!";
-	});
+$app->get('/', function () use ($app) {
+	$app->response->headers->set('Content-Type', 'text/html;charset=utf8');
+	$app->render("index.twig");
+});
 
 $app->group('/api/v1', function() use ($app) {
 		// all api output is JSON
