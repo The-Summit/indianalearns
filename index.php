@@ -3,6 +3,9 @@ require 'config/config.php';
 require 'vendor/autoload.php';
 require 'utils.php';
 
+use Aptoma\Twig\Extension\MarkdownExtension;
+use Aptoma\Twig\Extension\MarkdownEngine;
+
 $app = new \Slim\Slim(array(
 	'db.host' => INDIANALEARNS_DB_HOST,
 	'db.user' => INDIANALEARNS_DB_USER,
@@ -17,6 +20,9 @@ $app = new \Slim\Slim(array(
 ));
 
 $app->get('/', function () use ($app) {
+	$engine = new MarkdownEngine\MichelfMarkdownEngine();
+
+	$app->view->parserExtensions = array(new MarkdownExtension($engine));
 	$app->response->headers->set('Content-Type', 'text/html;charset=utf8');
 	$app->render("index.twig");
 });
