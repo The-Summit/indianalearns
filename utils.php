@@ -63,24 +63,7 @@ function prepare_json_output($data) {
 	return indent_json_string(preg_replace(';\\\/;', '/', json_encode($data)));
 }
 
-function prepForHumans(){
-	$app = \Slim\Slim::getInstance();
-	
-	// Compile LESS & add stylesheet link to view
-	$style = autoCompileLess();
-	$app->view->appendData(array("style"=>$style));
-	
-	//Include current location for navigation class
-	$uri = $app->request->getResourceUri();
-	$app->view()->appendData(array("uri" => $uri));
 
-	// Make Markdown available
-	$engine = new MarkdownEngine\MichelfMarkdownEngine();
-	$app->view->parserExtensions = array(new MarkdownExtension($engine));
-	
-	// Set content type for browsers
-	$app->response->headers->set('Content-Type', 'text/html;charset=utf8');
-}
 function autoCompileLess() {
   // load the cache
 	try {
@@ -91,22 +74,6 @@ function autoCompileLess() {
 		return "/". $asset_path . $cache_dir . Less_Cache::Get( $less_files);
 	 } catch (Exception $ex) {
 		echo "LESS PHP had a compile error: ";
-		echo $ex->getMessage();
+		print_r($ex->getMessage());
 	}
-}
-function makePage($app,$id){
-	if(!is_readable("pages/" . $id . ".page") && !is_readable("templates/" . $id . ".twig")){
-		$app->response->setStatus(404);
-		$id = "404";
-	}elseif(is_readable("pages/" . $id . ".page")){
-		$text = explode("~~~",file_get_contents("pages/" . $id . ".page"));
-	}elseif(is_readable("templates/" . $id . ".twig")){
-		$text = array();
-	}
-	$app->render("page.twig",array(
-		"page"=>$id,
-		"title"=>array_shift($text),
-		"body"=>array_shift($text)
-		)
-	);
 }

@@ -20,11 +20,17 @@ $app = new \Slim\Slim(array(
 ));
 
 $app->get('/', function () use ($app) {
-	$engine = new MarkdownEngine\MichelfMarkdownEngine();
+	$style = autoCompileLess();
 
+	// Make Markdown available
+	$engine = new MarkdownEngine\MichelfMarkdownEngine();
 	$app->view->parserExtensions = array(new MarkdownExtension($engine));
+	
+	// Set content type for browsers
 	$app->response->headers->set('Content-Type', 'text/html;charset=utf8');
-	$app->render("index.twig");
+	
+	// Render using Twig
+	$app->render("index.twig", array("style"=>$style));
 });
 
 $app->group('/api/v1', function() use ($app) {
