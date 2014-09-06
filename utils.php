@@ -60,3 +60,17 @@ function indent_json_string($json) {
 function prepare_json_output($data) {
 	return indent_json_string(preg_replace(';\\\/;', '/', json_encode($data)));
 }
+
+function autoCompileLess() {
+  // load the cache
+	try {
+		$asset_path = 'assets/css/';
+		$cache_dir = 'cache/';
+		$less_files = array( $asset_path. 'style.less' => '/' );
+		Less_Cache::SetCacheDir($asset_path . $cache_dir);
+		return "/". $asset_path . $cache_dir . Less_Cache::Get( $less_files);
+	 } catch (Exception $ex) {
+		echo "LESS PHP had a compile error: ";
+		print_r($ex->getMessage());
+	}
+}
