@@ -7,8 +7,17 @@ h1,h3{
 	font-weight: 700;
 	color: #fff;	
 }
-h3{
-	color: @gray;
+a,a:link{
+	color: @brand-primary;	
+}
+a:hover{
+	h3, .glyphicon{
+		color: darken(@brand-primary, 10%);	
+		text-decoration: none;
+	}
+}
+a h3{
+	color: inherit;	
 }
 h2,h4,h5,h6,p{
 	text-transform: none;	
@@ -17,6 +26,9 @@ h2,h4,h5,h6,p{
 .jumbotron{
 	background-color: @brand-primary;
 	color: @gray-lighter;
+	a,a:link{
+		color: lighten(@brand-primary, 40%);	
+	}
 }
 .trifecta{
 	text-align: center;
@@ -26,5 +38,14 @@ h2,h4,h5,h6,p{
 	}
 	h3{
 		margin-top: 0;	
+	}
+}
+.quatro{
+	p{
+		.make-xs-column(6);
+		.make-sm-column(4);
+		.make-md-column(3);
+		height: 200px;
+		text-align: center;
 	}
 }

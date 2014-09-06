@@ -63,7 +63,21 @@ function prepare_json_output($data) {
 	return indent_json_string(preg_replace(';\\\/;', '/', json_encode($data)));
 }
 
+function prepForHumans(){
+	$app = \Slim\Slim::getInstance();
+	
+	// Compile LESS & add stylesheet link to view
+	$style = autoCompileLess();
+	$app->view->appendData(array("style"=>$style));
+		
 
+	// Make Markdown available
+	$engine = new MarkdownEngine\MichelfMarkdownEngine();
+	$app->view->parserExtensions = array(new MarkdownExtension($engine));
+	
+	// Set content type for browsers
+	$app->response->headers->set('Content-Type', 'text/html;charset=utf8');
+}
 function autoCompileLess() {
   // load the cache
 	try {
@@ -74,6 +88,6 @@ function autoCompileLess() {
 		return "/". $asset_path . $cache_dir . Less_Cache::Get( $less_files);
 	 } catch (Exception $ex) {
 		echo "LESS PHP had a compile error: ";
-		print_r($ex->getMessage());
+		echo $ex->getMessage();
 	}
 }
