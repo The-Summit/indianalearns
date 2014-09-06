@@ -10,5 +10,6 @@ return array(
     'Slim\\Views' => array($vendorDir . '/slim/views'),
     'Slim' => array($vendorDir . '/slim/slim'),
     'Michelf' => array($vendorDir . '/michelf/php-markdown'),
+    'Less' => array($vendorDir . '/oyejorge/less.php/lib'),
     'Aptoma' => array($vendorDir . '/aptoma/twig-markdown/src'),
 );
