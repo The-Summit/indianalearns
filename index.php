@@ -3,9 +3,6 @@ require 'config/config.php';
 require 'vendor/autoload.php';
 require 'utils.php';
 
-use Aptoma\Twig\Extension\MarkdownExtension;
-use Aptoma\Twig\Extension\MarkdownEngine;
-
 $app = new \Slim\Slim(array(
 	'db.host' => INDIANALEARNS_DB_HOST,
 	'db.user' => INDIANALEARNS_DB_USER,
@@ -20,17 +17,19 @@ $app = new \Slim\Slim(array(
 ));
 
 $app->get('/', function () use ($app) {
-	$style = autoCompileLess();
-
-	// Make Markdown available
-	$engine = new MarkdownEngine\MichelfMarkdownEngine();
-	$app->view->parserExtensions = array(new MarkdownExtension($engine));
-	
-	// Set content type for browsers
-	$app->response->headers->set('Content-Type', 'text/html;charset=utf8');
-	
-	// Render using Twig
-	$app->render("index.twig", array("style"=>$style));
+	$app->redirect('/home/');
+});
+$app->group('/home', 'prepForHumans', function() use ($app){
+	$app->get('/', function () use ($app){
+		$file = "index";
+		$text = file_get_contents("pages/" . $file . ".page");
+		$app->render($file . ".twig",array("text"=>$text));
+	});
+	$app->get('/demos', function () use ($app) {
+		$file = "demos";
+		$text = explode("~~~",file_get_contents("pages/" . $file . ".page"));
+		$app->render($file . ".twig",array("head"=>$text[0],"demos"=>$text[1]));
+	});
 });
 
 $app->group('/api/v1', function() use ($app) {

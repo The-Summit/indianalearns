@@ -1,42 +1,24 @@
 {% extends "base.twig" %}
 {% block content %}
-<div class="github-fork-ribbon-wrapper right">
-	<div class="github-fork-ribbon">
-		<a target="_blank" href="https://github.com/The-Summit/indianalearns">Fork me on GitHub</a>
-	</div>
-</div>
-<div class="jumbotron">
-	<div class="container">
-		<div class="col-md-8">
-{% markdown %}
-	# Let's Talk Education. #
-	## We believe important conversations about the future of our educational system can be enhanced by utilizing data freely available to the citizens of Indiana. ##
-	## We've organized it here.##
-{% endmarkdown %}
-		</div>
-		<div class="col-md-4">
-			<img src="/assets/img/indiana.png" class="img-circle img-responsive indiana" />
-		</div>
-	</div>
-</div>
+{{ jumbo.jumbotron(text) }}
 <div class="container-fluid trifecta">
 	<div class="col-xs-12 col-sm-4">
-		<span class="glyphicon glyphicon-eye-open"></span>
-		{% markdown %}
-			### Demos ###
-		{% endmarkdown %}
+		<a href="demos">
+			<span class="glyphicon glyphicon-eye-open"></span>
+			<h3>Demos</h3>
+		</a>
 	</div>
 	<div class="col-xs-12 col-sm-4">
-		<span class="glyphicon glyphicon-cloud"></span>
-		{% markdown %}
-			### API ###
-		{% endmarkdown %}
+		<a href="docs">
+			<span class="glyphicon glyphicon-cloud"></span>
+			<h3>API</h3>
+		</a>
 	</div>
 	<div class="col-xs-12 col-sm-4">
-		<span class="glyphicon glyphicon-floppy-save"></span>
-		{% markdown %}
-			### Data ###
-		{% endmarkdown %}	
+		<a href="data">
+			<span class="glyphicon glyphicon-floppy-save"></span>
+			<h3>Data</h3>
+		</a>
 	</div>
 </div>
 {% endblock %}
