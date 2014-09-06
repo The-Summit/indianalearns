@@ -1,16 +1,30 @@
-@import "../../vendor/twbs/bootstrap/less/bootstrap.less";
-@import "variables.less";
-h1{
+@import "../../vendor/twbs/bootstrap/less/bootstrap";
+@import "variables";
+@import "git-fork";
+h1,h3{
 	font-family: "Raleway", Helvetica;
 	text-transform: uppercase;
-	font-weight: 700;	
+	font-weight: 700;
+	color: #fff;	
 }
-h2,h3,h4,h5,h6,p{
-	font-family: "Cabin", Helvetica;
+h3{
+	color: @gray;
+}
+h2,h4,h5,h6,p{
 	text-transform: none;	
 	font-weight: 400;
 }
 .jumbotron{
 	background-color: @brand-primary;
 	color: @gray-lighter;
+}
+.trifecta{
+	text-align: center;
+	.glyphicon{
+		font-size: 	80px;
+		color: @brand-primary;
+	}
+	h3{
+		margin-top: 0;	
+	}
 }

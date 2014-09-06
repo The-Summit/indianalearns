@@ -1,5 +1,10 @@
 {% extends "base.twig" %}
 {% block content %}
+<div class="github-fork-ribbon-wrapper right">
+	<div class="github-fork-ribbon">
+		<a target="_blank" href="https://github.com/The-Summit/indianalearns">Fork me on GitHub</a>
+	</div>
+</div>
 <div class="jumbotron">
 	<div class="container">
 		<div class="col-md-8">
@@ -12,6 +17,26 @@
 		<div class="col-md-4">
 			<img src="/assets/img/indiana.png" class="img-circle img-responsive indiana" />
 		</div>
+	</div>
+</div>
+<div class="container-fluid trifecta">
+	<div class="col-xs-12 col-sm-4">
+		<span class="glyphicon glyphicon-eye-open"></span>
+		{% markdown %}
+			### Demos ###
+		{% endmarkdown %}
+	</div>
+	<div class="col-xs-12 col-sm-4">
+		<span class="glyphicon glyphicon-cloud"></span>
+		{% markdown %}
+			### API ###
+		{% endmarkdown %}
+	</div>
+	<div class="col-xs-12 col-sm-4">
+		<span class="glyphicon glyphicon-floppy-save"></span>
+		{% markdown %}
+			### Data ###
+		{% endmarkdown %}	
 	</div>
 </div>
 {% endblock %}
