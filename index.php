@@ -17,7 +17,6 @@ $app = new \Slim\Slim(array(
 ));
 
 $app->get('/', function () use ($app) {
-<<<<<<< HEAD
 	$app->redirect('/home/');
 });
 $app->group('/home', 'prepForHumans', function() use ($app){
@@ -27,23 +26,8 @@ $app->group('/home', 'prepForHumans', function() use ($app){
 	});
 	$app->get('/:id', function ($id) use ($app) {
 		makePage($app,$id);
-=======
-		$app->redirect('/home/');
 	});
-$app->group('/home', 'prepForHumans', function() use ($app){
-		$app->get('/', function () use ($app){
-				$file = "index";
-				$text = file_get_contents("pages/" . $file . ".page");
-				$app->render($file . ".twig",array("text"=>$text));
-			});
-		$app->get('/demos', function () use ($app) {
-				$file = "demos";
-				$text = explode("~~~",file_get_contents("pages/" . $file . ".page"));
-				$app->render($file . ".twig",array("head"=>$text[0],"demos"=>$text[1]));
-			});
->>>>>>> 96674898b6100499f2b192d17d0c532c62ac94d2
-	});
-
+});
 $app->group('/api/v1', function() use ($app) {
 		// all api output is JSON
 		$app->response->headers->set('Content-Type', 'application/json;charset=utf8');
