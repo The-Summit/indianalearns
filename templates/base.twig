@@ -1,0 +1,21 @@
+{% import "jumbo.html" as jumbo %}
+{% block head %}
+	{% include 'head.twig' %}
+{% endblock %}
+	<body class="" data-source="{% block source %}base.twig{% endblock %}">
+		{% block nav %}
+			{% include 'nav.twig' %}
+		{% endblock %}
+		<div class="github-fork-ribbon-wrapper right">
+			<div class="github-fork-ribbon">
+				<a target="_blank" href="https://github.com/The-Summit/indianalearns">Fork me on GitHub</a>
+			</div>
+		</div>
+		{% block content %}
+				<h1>Hello!</h1>
+		{% endblock %}
+		<footer id="footer">
+			{% include 'footer.twig' %}
+		</footer>
+    </body>
+</html>

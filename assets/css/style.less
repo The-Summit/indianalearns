@@ -1,0 +1,51 @@
+@import "../../vendor/twbs/bootstrap/less/bootstrap";
+@import "variables";
+@import "git-fork";
+h1,h3{
+	font-family: "Raleway", Helvetica;
+	text-transform: uppercase;
+	font-weight: 700;
+	color: #fff;	
+}
+a,a:link{
+	color: @brand-primary;	
+}
+a:hover{
+	h3, .glyphicon{
+		color: darken(@brand-primary, 10%);	
+		text-decoration: none;
+	}
+}
+a h3{
+	color: inherit;	
+}
+h2,h4,h5,h6,p{
+	text-transform: none;	
+	font-weight: 400;
+}
+.jumbotron{
+	background-color: @brand-primary;
+	color: @gray-lighter;
+	a,a:link{
+		color: lighten(@brand-primary, 40%);	
+	}
+}
+.trifecta{
+	text-align: center;
+	.glyphicon{
+		font-size: 	80px;
+		color: @brand-primary;
+	}
+	h3{
+		margin-top: 0;	
+	}
+}
+.quatro{
+	p{
+		.make-xs-column(6);
+		.make-sm-column(4);
+		.make-md-column(3);
+		height: 200px;
+		text-align: center;
+	}
+}
