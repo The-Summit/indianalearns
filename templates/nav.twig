@@ -1,0 +1,8 @@
+{% set links = {"/" : "home", "/home/demos" : "demos" ,"/home/docs" : "API", "/home/downloads" : "downloads"} %}
+<nav class="navbar navbar-default" role="navigation">
+	<ul class="nav nav-pills navbar-right">
+		{% for link,title in links %}
+			<li><a href="{{link}}" {% if link == uri %}class="active"{% endif %}>{{title | capitalize}}</a></li>
+		{% endfor %}
+	</ul>
+</nav>
