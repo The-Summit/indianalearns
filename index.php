@@ -17,6 +17,7 @@ $app = new \Slim\Slim(array(
 ));
 
 $app->get('/', function () use ($app) {
+<<<<<<< HEAD
 	$app->redirect('/home/');
 });
 $app->group('/home', 'prepForHumans', function() use ($app){
@@ -26,8 +27,22 @@ $app->group('/home', 'prepForHumans', function() use ($app){
 	});
 	$app->get('/:id', function ($id) use ($app) {
 		makePage($app,$id);
+=======
+		$app->redirect('/home/');
 	});
-});
+$app->group('/home', 'prepForHumans', function() use ($app){
+		$app->get('/', function () use ($app){
+				$file = "index";
+				$text = file_get_contents("pages/" . $file . ".page");
+				$app->render($file . ".twig",array("text"=>$text));
+			});
+		$app->get('/demos', function () use ($app) {
+				$file = "demos";
+				$text = explode("~~~",file_get_contents("pages/" . $file . ".page"));
+				$app->render($file . ".twig",array("head"=>$text[0],"demos"=>$text[1]));
+			});
+>>>>>>> 96674898b6100499f2b192d17d0c532c62ac94d2
+	});
 
 $app->group('/api/v1', function() use ($app) {
 		// all api output is JSON
@@ -96,7 +111,15 @@ $app->group('/api/v1', function() use ($app) {
 				echo prepare_json_output($results);
 			});
 
-		$app->get('/reports/istep_corporations', function() use ($app) {
+		$app->get('/reports/:report', function($report) use ($app) {
+				if($report === 'istep_corporations' || $report === 'istep_schools_public') {
+					$table = 'report_'.$report;
+				} else {
+					$app->halt(404, array('error'=>
+					                      array('code'=>404,
+					                            'message'=>'the requested resource could not be found')));
+				}
+
 				$db = $app->config('db.handle');
 
 				// get the list of queryable fields for this report
@@ -107,12 +130,12 @@ $app->group('/api/v1', function() use ($app) {
 					.'   COLUMN_COMMENT'
 					.'  FROM information_schema.COLUMNS'
 					.'  WHERE TABLE_SCHEMA = \'indianalearns\''
-					.'    AND TABLE_NAME = \'report_istep_corporations\'';
+					.'    AND TABLE_NAME = \''.$table.'\'';
 				$q = $db->prepare($sql);
 				$q->execute();
 
 				// prepare to assemble our actual query
-				$sql = 'SELECT * FROM indianalearns.report_istep_corporations';
+				$sql = 'SELECT * FROM indianalearns.'.$table;
 				$sql_clauses = array();
 				$sql_params = array();
 
