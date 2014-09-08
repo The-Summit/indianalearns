@@ -69,7 +69,10 @@ function prepForHumans(){
 	// Compile LESS & add stylesheet link to view
 	$style = autoCompileLess();
 	$app->view->appendData(array("style"=>$style));
-		
+	
+	//Include current location for navigation class
+	$uri = $app->request->getResourceUri();
+	$app->view()->appendData(array("uri" => $uri));
 
 	// Make Markdown available
 	$engine = new MarkdownEngine\MichelfMarkdownEngine();
@@ -90,4 +93,17 @@ function autoCompileLess() {
 		echo "LESS PHP had a compile error: ";
 		echo $ex->getMessage();
 	}
+}
+function makePage($app,$id){
+	if(!is_readable("pages/" . $id . ".page")){
+		$app->response->setStatus(404);
+		$id = "404";
+	}
+	$text = explode("~~~",file_get_contents("pages/" . $id . ".page"));
+	$app->render("page.twig",array(
+		"page"=>$id,
+		"title"=>array_shift($text),
+		"body"=>array_shift($text)
+		)
+	);
 }
