@@ -27,10 +27,16 @@ $app->group('/home', 'prepForHumans', function() use ($app){
 	$app->get('/:id', function ($id) use ($app) {
 		makePage($app,$id);
 	});
+	$app->get('/demos/:id', function ($id) use ($app) {
+		makePage($app,$id);
+	});
 });
 $app->group('/api/v1', function() use ($app) {
 		// all api output is JSON
 		$app->response->headers->set('Content-Type', 'application/json;charset=utf8');
+		
+		// allow requests from all origins
+		$app->response->headers->set('Access-Control-Allow-Origin', '*');
 
 		// set the 404 / route not found handler to something that won't try to output HTML
 		$app->notFound(function() use ($app) {
