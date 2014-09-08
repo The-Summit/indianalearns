@@ -1,8 +1,8 @@
-{% import "jumbo.html" as jumbo %}
+{% import "jumbo.twig" as jumbo %}
 {% block head %}
 	{% include 'head.twig' %}
 {% endblock %}
-	<body class="" data-source="{% block source %}base.twig{% endblock %}">
+	<body class="{{page}}" data-source="{% block source %}base.twig{% endblock %}">
 		{% block nav %}
 			{% include 'nav.twig' %}
 		{% endblock %}

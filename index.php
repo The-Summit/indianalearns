@@ -21,14 +21,11 @@ $app->get('/', function () use ($app) {
 });
 $app->group('/home', 'prepForHumans', function() use ($app){
 	$app->get('/', function () use ($app){
-		$file = "index";
-		$text = file_get_contents("pages/" . $file . ".page");
-		$app->render($file . ".twig",array("text"=>$text));
+		$id = "home";
+		makePage($app,$id);
 	});
-	$app->get('/demos', function () use ($app) {
-		$file = "demos";
-		$text = explode("~~~",file_get_contents("pages/" . $file . ".page"));
-		$app->render($file . ".twig",array("head"=>$text[0],"demos"=>$text[1]));
+	$app->get('/:id', function ($id) use ($app) {
+		makePage($app,$id);
 	});
 });
 
