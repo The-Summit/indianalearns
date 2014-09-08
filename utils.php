@@ -1,4 +1,6 @@
 <?php
+use Aptoma\Twig\Extension\MarkdownExtension;
+use Aptoma\Twig\Extension\MarkdownEngine;
 // since we're not currently using PHP > 5.3, we're missing some niceties and have to implement them ourselves
 function indent_json_string($json) {
 	// nicked from http://www.daveperrett.com/articles/2008/03/11/format-json-with-php/
@@ -59,4 +61,33 @@ function indent_json_string($json) {
 // takes an array of key=>value pairs, returns a pretty-printed JSON string
 function prepare_json_output($data) {
 	return indent_json_string(preg_replace(';\\\/;', '/', json_encode($data)));
+}
+
+function prepForHumans(){
+	$app = \Slim\Slim::getInstance();
+	
+	// Compile LESS & add stylesheet link to view
+	$style = autoCompileLess();
+	$app->view->appendData(array("style"=>$style));
+		
+
+	// Make Markdown available
+	$engine = new MarkdownEngine\MichelfMarkdownEngine();
+	$app->view->parserExtensions = array(new MarkdownExtension($engine));
+	
+	// Set content type for browsers
+	$app->response->headers->set('Content-Type', 'text/html;charset=utf8');
+}
+function autoCompileLess() {
+  // load the cache
+	try {
+		$asset_path = 'assets/css/';
+		$cache_dir = 'cache/';
+		$less_files = array( $asset_path. 'style.less' => '/' );
+		Less_Cache::SetCacheDir($asset_path . $cache_dir);
+		return "/". $asset_path . $cache_dir . Less_Cache::Get( $less_files);
+	 } catch (Exception $ex) {
+		echo "LESS PHP had a compile error: ";
+		echo $ex->getMessage();
+	}
 }

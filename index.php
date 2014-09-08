@@ -16,9 +16,21 @@ $app = new \Slim\Slim(array(
 	'view' => new \Slim\Views\Twig()
 ));
 
-$app->get('/', function () {
-		echo "Hello, user!";
+$app->get('/', function () use ($app) {
+	$app->redirect('/home/');
+});
+$app->group('/home', 'prepForHumans', function() use ($app){
+	$app->get('/', function () use ($app){
+		$file = "index";
+		$text = file_get_contents("pages/" . $file . ".page");
+		$app->render($file . ".twig",array("text"=>$text));
 	});
+	$app->get('/demos', function () use ($app) {
+		$file = "demos";
+		$text = explode("~~~",file_get_contents("pages/" . $file . ".page"));
+		$app->render($file . ".twig",array("head"=>$text[0],"demos"=>$text[1]));
+	});
+});
 
 $app->group('/api/v1', function() use ($app) {
 		// all api output is JSON
