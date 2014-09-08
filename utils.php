@@ -95,11 +95,14 @@ function autoCompileLess() {
 	}
 }
 function makePage($app,$id){
-	if(!is_readable("pages/" . $id . ".page")){
+	if(!is_readable("pages/" . $id . ".page") && !is_readable("templates/" . $id . ".twig")){
 		$app->response->setStatus(404);
 		$id = "404";
+	}elseif(is_readable("pages/" . $id . ".page")){
+		$text = explode("~~~",file_get_contents("pages/" . $id . ".page"));
+	}elseif(is_readable("templates/" . $id . ".twig")){
+		$text = array();
 	}
-	$text = explode("~~~",file_get_contents("pages/" . $id . ".page"));
 	$app->render("page.twig",array(
 		"page"=>$id,
 		"title"=>array_shift($text),
