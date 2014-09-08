@@ -17,17 +17,20 @@ $app = new \Slim\Slim(array(
 ));
 
 $app->get('/', function () use ($app) {
-	$app->redirect('/home/');
-});
+		$app->redirect('/home/');
+	});
 $app->group('/home', 'prepForHumans', function() use ($app){
-	$app->get('/', function () use ($app){
-		$id = "home";
-		makePage($app,$id);
+		$app->get('/', function () use ($app){
+				$file = "index";
+				$text = file_get_contents("pages/" . $file . ".page");
+				$app->render($file . ".twig",array("text"=>$text));
+			});
+		$app->get('/demos', function () use ($app) {
+				$file = "demos";
+				$text = explode("~~~",file_get_contents("pages/" . $file . ".page"));
+				$app->render($file . ".twig",array("head"=>$text[0],"demos"=>$text[1]));
+			});
 	});
-	$app->get('/:id', function ($id) use ($app) {
-		makePage($app,$id);
-	});
-});
 
 $app->group('/api/v1', function() use ($app) {
 		// all api output is JSON
@@ -129,19 +132,13 @@ $app->group('/api/v1', function() use ($app) {
 			});
 
 		$app->get('/reports/:report', function($report) use ($app) {
-				if(
-					'istep_corporations'      === $report ||
-					'istep_schools_public'    === $report ||
-					'istep_schools_nonpublic' === $report ||
-					'corporation_graduation_rates' === $report
-				) {
+				if($report === 'istep_corporations' || $report === 'istep_schools_public') {
 					$table = 'report_'.$report;
 				} else {
 					$app->halt(404, array('error'=>
 					                      array('code'=>404,
 					                            'message'=>'the requested resource could not be found')));
 				}
-				
 				$db = $app->config('db.handle');
 
 				$sql = 'SELECT'
@@ -154,7 +151,7 @@ $app->group('/api/v1', function() use ($app) {
 				$q = $db->prepare($sql);
 				$q->execute();
 
-				// begin to assemble our actual query
+				// prepare to assemble our actual query
 				$sql = 'SELECT * FROM indianalearns.'.$table;
 				$sql_clauses = array();
 				$sql_params = array();
