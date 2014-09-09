@@ -89,16 +89,33 @@ $app->group('/api/v1', function() use ($app) {
 		$app->get('/schools(/(:id))', function($id=null) use ($app) {
 				$db = $app->config('db.handle');
 
-				if($id == null) {
-					$q = $db->prepare('SELECT * FROM indianalearns.directory_schools');
-					$q->setFetchMode(PDO::FETCH_ASSOC);
-					$q->execute();
-				} else {
-					$q = $db->prepare('SELECT * FROM indianalearns.directory_schools WHERE id = ?');
-					$q->setFetchMode(PDO::FETCH_ASSOC);
-					$q->execute(array($id));
+				$sql = 'SELECT * FROM indianalearns.directory_schools';
+
+				if($id != null) {
+					$sql .= ' WHERE id = :id';
 				}
-				
+
+				$sql .= ' LIMIT :offset,:limit';
+				$q = $db->prepare($sql);
+				$q->setFetchMode(PDO::FETCH_ASSOC);
+
+				$limit = $app->request->params('limit');
+				$offset = $app->request->params('offset');
+				if(empty($limit)) {
+					$limit = 100;
+				}
+				if(empty($offset)) {
+					$offset = 0;
+				}
+				$q->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
+				$q->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+
+				if($id) {
+					$q->bindValue(':id', (int) $id, PDO::PARAM_INT);
+				}
+
+				$q->execute();
+								
 				$results = array();
 				while($row = $q->fetch()) {
 					// add a link to the arcgis service at maps.indiana.edu
