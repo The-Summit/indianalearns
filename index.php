@@ -76,8 +76,8 @@ $app->group('/api/v1', function() use ($app) {
 				while($row = $q->fetch()) {
 					$row['gis_url'] = 
 						'http://maps.indiana.edu/arcgis/rest/services/Infrastructure'
-						.'/Schools_Districts_USCB/Mapserver/0/query'
-						.'?text='.str_replace(' ', '+', strtoupper($row['name']))
+						.'/Schools_Districts_2013_USCB/Mapserver/0/query'
+						.'?text='.str_replace(' ', '+', $row['name'])
 						.'&f=json';
 					
 					array_push($results, $row);
