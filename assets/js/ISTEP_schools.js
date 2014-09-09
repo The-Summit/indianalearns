@@ -64,7 +64,8 @@ var map;
 		// take an ArcGIS url and project its geometry into lat/lon
 		$.getJSON(url, function(data) {
 			var spatialRefID = data.spatialReference.wkid;
-			var outputSpatialRefID = 4326; // constant, refers to lat/lon coordinate system
+			// 4326 is a constant, refers to GCS_WGS_1984, allows us to convert points defined in relation to spatialRefID into points relative to gmaps lat/lon
+			var outputSpatialRefID = 4326; 
 			
 			var geometries = {
 				geometryType: data.geometryType,
