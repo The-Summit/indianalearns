@@ -17,20 +17,20 @@ $app = new \Slim\Slim(array(
 ));
 
 $app->get('/', function () use ($app) {
-	$app->redirect('/home/');
-});
+		$app->redirect('/home/');
+	});
 $app->group('/home', 'prepForHumans', function() use ($app){
-	$app->get('/', function () use ($app){
-		$id = "home";
-		makePage($app,$id);
+		$app->get('/', function () use ($app){
+				$id = "home";
+				makePage($app,$id);
+			});
+		$app->get('/:id', function ($id) use ($app) {
+				makePage($app,$id);
+			});
+		$app->get('/demos/:id', function ($id) use ($app) {
+				makePage($app,$id);
+			});
 	});
-	$app->get('/:id', function ($id) use ($app) {
-		makePage($app,$id);
-	});
-	$app->get('/demos/:id', function ($id) use ($app) {
-		makePage($app,$id);
-	});
-});
 $app->group('/api/v1', function() use ($app) {
 		// all api output is JSON
 		$app->response->headers->set('Content-Type', 'application/json;charset=utf8');
@@ -76,8 +76,8 @@ $app->group('/api/v1', function() use ($app) {
 				while($row = $q->fetch()) {
 					$row['gis_url'] = 
 						'http://maps.indiana.edu/arcgis/rest/services/Infrastructure'
-						.'/Schools_Districts_2013_USCB/Mapserver/0/query'
-						.'?text='.str_replace(' ', '+', $row['name'])
+						.'/Schools_Districts_USCB/Mapserver/0/query'
+						.'?text='.str_replace(' ', '+', strtoupper($row['name']))
 						.'&f=json';
 					
 					array_push($results, $row);
@@ -122,7 +122,7 @@ $app->group('/api/v1', function() use ($app) {
 					$row['gis_url'] = 
 						'http://maps.indiana.edu/arcgis/rest/services/Infrastructure'
 						.'/Schools_IDOE/Mapserver/0/query'
-						.'?where=IDOE_ID+%3D+\''.(str_pad($row['id'], 4, '0', STR_PAD_LEFT)).'\''
+						.'?text='.str_replace(' ', '+', strtoupper($row['name']))
 						.'&f=json';
 					array_push($results, $row);
 				}
