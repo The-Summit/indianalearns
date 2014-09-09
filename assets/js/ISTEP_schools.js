@@ -1,4 +1,3 @@
-var map;
 (function(){
 	$("#map-canvas").height($(window).height()-$(".navbar").outerHeight());
 	var mapOptions = {
@@ -7,6 +6,7 @@ var map;
  		mapTypeControl: false
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+
 	getUserLocation();
 	loadSchools();
 	
@@ -30,34 +30,24 @@ var map;
 		map.setCenter(gloc);	
 	}
 	function loadSchools(){
-		$.getJSON("//indianalearns.info/api/v1/schools/",function(data){	
-			var count = 0;
-			$.each(data,function(index,d){
-				count = count + 1;
-				if(count>10){return false;}
-
-				projectGISToLatLon(d.gis_url, function(pos) {
-					var mark = new google.maps.Marker({
-						map: map,
-						position: pos,
-						title: d.name,
-						animation: google.maps.Animation.DROP
-					});
+		$.getJSON("//indianalearns.info/api/v1/schools?limit=99999",function(data){
+			for(var i = 0; i < data.length; i++){
+				var d = data[i];
+				var loc = new google.maps.LatLng(d.lat,d.lon);
+				var mark = new google.maps.Marker({
+					map: map,
+					position: loc,
+					title: d.name
 				});
-				// var add = encodeURIComponent(d.address);
-				// var zip = encodeURIComponent(d.zip);
-				// $.getJSON("https://maps.googleapis.com/maps/api/geocode/json?components=street_address:" + add +"|postal_code:"+zip,function(data){
-				// 	var lat = data.results[0].geometry.location.lat;
-				// 	var lng = data.results[0].geometry.location.lng;
-				// 	var pos = new google.maps.LatLng(lat,lng);
-
-				// 	var mark = new google.maps.Marker({
-				// 		postion: pos,
-				// 		map: map,
-				// 		animation: google.maps.Animation.DROP
-				// 	});
-				// });
-			});
+				mark['infowindow'] = new google.maps.InfoWindow({
+					content : "<h1>" + d.name + "</h1>"+
+					"<ul><li><strong>Principal: </strong>" + d.principal_name + "</li>"+
+					"<li><strong>School Type: </strong>"+d.category + "</li></ul>"
+				});
+				google.maps.event.addListener(mark, 'click', function() {
+					this['infowindow'].open(map,this);
+				});
+			}
 		});
 	}
 	function projectGISToLatLon(url, callback) {
