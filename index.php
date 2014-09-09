@@ -111,7 +111,7 @@ $app->group('/api/v1', function() use ($app) {
 				$q->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
 
 				if($id) {
-					$q->bindValue(':id', $id);
+					$q->bindValue(':id', (int) $id, PDO::PARAM_INT);
 				}
 
 				$q->execute();
