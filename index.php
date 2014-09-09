@@ -102,18 +102,19 @@ $app->group('/api/v1', function() use ($app) {
 			});
 
 		$app->get('/reports/:report', function($report) use ($app) {
-				if($report === 'istep_corporations' || $report === 'istep_schools_public') {
+				if(
+					'istep_corporations'   === $report ||
+					'istep_schools_public' === $report 
+				) {
 					$table = 'report_'.$report;
 				} else {
 					$app->halt(404, array('error'=>
 					                      array('code'=>404,
 					                            'message'=>'the requested resource could not be found')));
 				}
-
+				
 				$db = $app->config('db.handle');
 
-				// get the list of queryable fields for this report
-				//$sql = 'SELECT report_column, field_type, operations, id_table FROM indianalearns.meta_report_queryables WHERE report_id = 4;';
 				$sql = 'SELECT'
 					.'   COLUMN_NAME,'
 					.'   DATA_TYPE,'
@@ -124,7 +125,7 @@ $app->group('/api/v1', function() use ($app) {
 				$q = $db->prepare($sql);
 				$q->execute();
 
-				// prepare to assemble our actual query
+				// begin to assemble our actual query
 				$sql = 'SELECT * FROM indianalearns.'.$table;
 				$sql_clauses = array();
 				$sql_params = array();
@@ -145,10 +146,31 @@ $app->group('/api/v1', function() use ($app) {
 					$sql .= ' WHERE ';
 					$sql .= implode(' AND ', $sql_clauses);
 				}
-
+				$sql .= ' LIMIT :offset,:limit';
+				// $sql is now complete
+				
+				// prepare query object and start binding values
 				$q = $db->prepare($sql);
 				$q->setFetchMode(PDO::FETCH_ASSOC);
-				$q->execute($sql_params);
+
+				// set default offset/limit values
+				$limit = $app->request->params('limit');
+				$offset = $app->request->params('offset');
+				if(empty($limit)) {
+					$limit = 500;
+				}
+				if(empty($offset)) {
+					$offset = 0;
+				}
+				$q->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
+				$q->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+
+				// bind specific user parameters
+				foreach($sql_params as $key=>$value) {
+					$q->bindValue(':'.$key, $value);
+				}
+
+				$q->execute();
 
 				$results = array();
 				while($row = $q->fetch()) {
