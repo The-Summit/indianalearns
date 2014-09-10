@@ -62,16 +62,22 @@ label{
 		font-size: @font-size-h2;
 	}
 	p{
-		font-size: 1.8em;	
+		font-size: 1.8em;
 	}
 }
 .demos{
 	p{
+		&:extend(h3);
 		.make-xs-column(6);
 		.make-sm-column(4);
 		.make-md-column(3);
 		height: 200px;
 		text-align: center;
+		padding: 10px 20px;
+		img{
+			&:extend(.img-responsive);	
+			padding-bottom: 10px;
+		}
 	}
 }
 .gm-style-iw{
