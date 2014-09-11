@@ -111,7 +111,7 @@ $app->group('/api/v1', function() use ($app) {
 				$q->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
 
 				if($id) {
-					$q->bindValue(':id', (int) $id, PDO::PARAM_INT);
+					$q->bindValue(':id', $id);
 				}
 
 				$q->execute();
@@ -132,8 +132,10 @@ $app->group('/api/v1', function() use ($app) {
 
 		$app->get('/reports/:report', function($report) use ($app) {
 				if(
-					'istep_corporations'   === $report ||
-					'istep_schools_public' === $report 
+					'istep_corporations'      === $report ||
+					'istep_schools_public'    === $report ||
+					'istep_schools_nonpublic' === $report ||
+					'corporation_graduation_rates' === $report
 				) {
 					$table = 'report_'.$report;
 				} else {
