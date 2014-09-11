@@ -122,7 +122,7 @@ $app->group('/api/v1', function() use ($app) {
 					$row['gis_url'] = 
 						'http://maps.indiana.edu/arcgis/rest/services/Infrastructure'
 						.'/Schools_IDOE/Mapserver/0/query'
-						.'?text='.str_replace(' ', '+', strtoupper($row['name']))
+						.'?where=IDOE_ID+%3D+\''.(str_pad($row['id'], 4, '0', STR_PAD_LEFT)).'\''
 						.'&f=json';
 					array_push($results, $row);
 				}
