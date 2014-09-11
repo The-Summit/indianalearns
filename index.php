@@ -45,7 +45,7 @@ $app->group('/api/v1', function() use ($app) {
 				                                     'message'=>'the requested resource could not be found')));
 			});
 		
-		$app->get('/', function() use ($app) {
+		$app->get('/(reports)', function() use ($app) {
 				$db = $app->config('db.handle');
 				$q = $db->prepare('SELECT name, location, description, origin_url FROM indianalearns.index');
 				$q->setFetchMode(PDO::FETCH_ASSOC);
