@@ -46,14 +46,14 @@
 			});
 	}
 	function buildSchoolInfoWindow(school,test){
+		var testResults = test ? "<li><strong>Grade " + test.group + " English / Language Arts Passing: </strong>"+Number(test.ela_percent_pass*100).toPrecision(4)+ "%</li>" +
+			"<li><strong>Grade " + test.group + " Mathematics Passing: </strong>"+Number(test.math_percent_pass*100).toPrecision(4) + "%</li>" +
+			"<li><strong>Grade " + test.group + " Combined Passing: </strong>"+Number(test.pass_both_percent*100).toPrecision(4)+ "%</li>" : "";
 		return new google.maps.InfoWindow({
 			content : "<h1>" + school.name + "</h1>"+
 			"<ul><li><strong>Principal: </strong>" + school.principal_name + "</li>"+
 			"<li><strong>School Type: </strong>"+school.category + "</li>" + 
-			"<li><strong>Grade " + test.group + " English / Language Arts Passing: </strong>"+Number(test.ela_percent_pass*100).toPrecision(4)+ "%</li>" +
-			"<li><strong>Grade " + test.group + " Mathematics Passing: </strong>"+Number(test.math_percent_pass*100).toPrecision(4) + "%</li>" +
-			"<li><strong>Grade " + test.group + " Combined Passing: </strong>"+Number(test.pass_both_percent*100).toPrecision(4)+ "%</li>" +
-			"<li><strong>Grades: </strong>"+school.grade_span + "</li></ul>"
+			"<li><strong>Grades: </strong>"+school.grade_span + "</li></ul>" + testResults
 		});	
 	}
 	function schoolHasGrade(school,grade){
