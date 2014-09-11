@@ -24,7 +24,7 @@
 			{% else %}
 				{% set gr = i %}
 			{% endif %}
-			<option label="{{gr}}" value="{{i}}" {% if i==7 %}selected{%endif%}/>
+			<option label="{{gr}}" value="{{i}}" {% if i==7 %}selected{%endif%}>{{gr}}</option>
 		{% endfor %}
 		</select>
 		<h3>Assessment</h3>
