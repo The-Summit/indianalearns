@@ -31,6 +31,16 @@ $app->group('/home', 'prepForHumans', function() use ($app){
 				makePage($app,$id);
 			});
 	});
+$app->get('/docs(/(:id))',function ($id=null) use ($app){
+	$app->response->headers->set('Access-Control-Allow-Origin', '*');
+	$app->response->headers->set('Content-Type', 'application/x-yaml;charset=utf8');
+	if(!is_readable("docs/" . $id . ".yml")){
+		$app->response->setStatus(404);
+		echo "error!";
+	}else{
+		echo file_get_contents("docs/" . $id . ".yml");
+	}
+});
 $app->group('/api/v1', function() use ($app) {
 		// all api output is JSON
 		$app->response->headers->set('Content-Type', 'application/json;charset=utf8');
