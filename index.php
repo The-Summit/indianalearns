@@ -55,7 +55,7 @@ $app->group('/api/v1', function() use ($app) {
 				                                     'message'=>'the requested resource could not be found')));
 			});
 		
-		$app->get('/', function() use ($app) {
+		$app->get('/(reports)', function() use ($app) {
 				$db = $app->config('db.handle');
 				$q = $db->prepare('SELECT name, location, description, origin_url FROM indianalearns.index');
 				$q->setFetchMode(PDO::FETCH_ASSOC);
@@ -121,7 +121,7 @@ $app->group('/api/v1', function() use ($app) {
 				$q->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
 
 				if($id) {
-					$q->bindValue(':id', (int) $id, PDO::PARAM_INT);
+					$q->bindValue(':id', $id);
 				}
 
 				$q->execute();
@@ -132,7 +132,7 @@ $app->group('/api/v1', function() use ($app) {
 					$row['gis_url'] = 
 						'http://maps.indiana.edu/arcgis/rest/services/Infrastructure'
 						.'/Schools_IDOE/Mapserver/0/query'
-						.'?text='.str_replace(' ', '+', strtoupper($row['name']))
+						.'?where=IDOE_ID+%3D+\''.(str_pad($row['id'], 4, '0', STR_PAD_LEFT)).'\''
 						.'&f=json';
 					array_push($results, $row);
 				}
@@ -142,8 +142,10 @@ $app->group('/api/v1', function() use ($app) {
 
 		$app->get('/reports/:report', function($report) use ($app) {
 				if(
-					'istep_corporations'   === $report ||
-					'istep_schools_public' === $report 
+					'istep_corporations'      === $report ||
+					'istep_schools_public'    === $report ||
+					'istep_schools_nonpublic' === $report ||
+					'corporation_graduation_rates' === $report
 				) {
 					$table = 'report_'.$report;
 				} else {
