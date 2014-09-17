@@ -5,7 +5,7 @@
         "description": "We believe important conversations about the future of our educational system can be enhanced by utilizing data freely available to the citizens of Indiana. We've organized it here.",
         "version": "1.0.0"
     },
-    "host": "indianalearns.info",
+    "host": "",
     "schemes": [
         "http"
     ],
@@ -25,7 +25,10 @@
                     "200": {
                         "description": "An array of Corporations",
                         "schema": {
-                            "$ref": "Corporations"
+                            "type": "array",
+                            "items": {
+                                "$ref": "Corporation"
+                            }
                         }
                     },
                     "404": {
@@ -67,6 +70,20 @@
             "get": {
                 "summary": "School Directory",
                 "description": "Directory of all known schools",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of results (default 100)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Used in conjunction with the limit parameter to offset the results",
+                        "type": "number"
+                    }
+                ],
                 "tags": [
                     "schools"
                 ],
@@ -74,7 +91,10 @@
                     "200": {
                         "description": "An array of Schools",
                         "schema": {
-                            "$ref": "Schools"
+                            "type": "array",
+                            "items": {
+                                "$ref": "School"
+                            }
                         }
                     },
                     "404": {
@@ -104,6 +124,121 @@
                         "description": "A specific School",
                         "schema": {
                             "$ref": "School"
+                        }
+                    },
+                    "404": {
+                        "description": "The requested resource could not be found."
+                    }
+                }
+            }
+        },
+        "/reports": {
+            "get": {
+                "summary": "School & Corporation reports",
+                "description": "Index of available reports",
+                "tags": [
+                    "reports"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Index of available reports",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "Report"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The requested resource could not be found."
+                    }
+                }
+            }
+        },
+        "/reports/istep_corporations": {
+            "get": {
+                "summary": "ISTEP+ results at the school district/corporation level",
+                "description": "ISTEP+ results at the school district/corporation level, grouped by year and grade",
+                "tags": [
+                    "reports"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Index of all ISTEP+ results at district/corporation level",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "ISTEP_Corp"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The requested resource could not be found."
+                    }
+                }
+            }
+        },
+        "/reports/istep_schools_public": {
+            "get": {
+                "summary": "ISTEP+ results for public schools",
+                "description": "ISTEP+ results for public schools",
+                "tags": [
+                    "reports"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Index of all ISTEP+ results for public schools",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "ISTEP_Public_School"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The requested resource could not be found."
+                    }
+                }
+            }
+        },
+        "/reports/istep_schools_nonpublic": {
+            "get": {
+                "summary": "ISTEP+ results for nonpublic schools",
+                "description": "ISTEP+ results for nonpublic schools",
+                "tags": [
+                    "reports"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Index of all ISTEP+ results for nonpublic schools",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "ISTEP_NonPublic_School"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The requested resource could not be found."
+                    }
+                }
+            }
+        },
+        "/reports/corporation_graduation_rates": {
+            "get": {
+                "summary": "Disaggregated graduation rates by corporation",
+                "description": "Disaggregated graduation rates by corporation",
+                "tags": [
+                    "reports"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Disaggregated graduation rates by corporation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "Corporation_Graduation"
+                            }
                         }
                     },
                     "404": {
@@ -192,7 +327,7 @@
                 },
                 "grade_span": {
                     "type": "string",
-                    "description": "A span of grades the school covers, where KG = Kindergarten, PK = Pre-Kindergarten, and SP & ED = Special Education."
+                    "description": "A span of grades the school covers, where KG = Kindergarten, PK = Pre-Kindergarten, and SP & ED = Special Educatio.n10"
                 },
                 "phone": {
                     "type": "string",
@@ -228,6 +363,218 @@
             "type": "array",
             "items": {
                 "$ref": "School"
+            }
+        },
+        "Reports": {
+            "type": "array",
+            "items": {
+                "$ref": "Report"
+            }
+        },
+        "Report": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of the report"
+                },
+                "location": {
+                    "type": "string",
+                    "description": "Path to report"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of report"
+                },
+                "origin_url": {
+                    "type": "string",
+                    "description": "Our data source"
+                }
+            }
+        },
+        "ISTEP_Corp": {
+            "properties": {
+                "corp_id": {
+                    "type": "number",
+                    "description": "School corporation ID as assigned by State of Indiana."
+                },
+                "corp_name": {
+                    "type": "string",
+                    "description": "School corporation name as registered in the State of Indiana."
+                },
+                "group": {
+                    "type": "string",
+                    "description": "Grade level taking assessment"
+                },
+                "year": {
+                    "type": "number",
+                    "description": "Year the assessment was taken (in the spring)"
+                },
+                "ela_pass_n": {
+                    "type": "number",
+                    "description": "Number of students passing the English / Language Arts portion of the test"
+                },
+                "ela_percent_pass": {
+                    "type": "number",
+                    "description": "Percentage of students passing the English / Language Arts portion of the test"
+                },
+                "math_pass_n": {
+                    "type": "number",
+                    "description": "Number of students passing the Math portion of the test"
+                },
+                "math_percent_pass": {
+                    "type": "number",
+                    "description": "Percent of students passing the Math portion of the test"
+                },
+                "pass_both_percent": {
+                    "type": "number",
+                    "description": "Number of students passing the both portions of the test"
+                },
+                "report_id": {
+                    "type": "number",
+                    "description": "A unique ID for each report entry"
+                }
+            }
+        },
+        "ISTEP_Public_School": {
+            "properties": {
+                "corp_id": {
+                    "type": "number",
+                    "description": "School corporation ID as assigned by State of Indiana."
+                },
+                "corp_name": {
+                    "type": "string",
+                    "description": "School corporation name as registered in the State of Indiana."
+                },
+                "school_id": {
+                    "type": "number",
+                    "description": "School ID as assigned by State of Indiana."
+                },
+                "school_name": {
+                    "type": "string",
+                    "description": "School name as registered in the State of Indiana."
+                },
+                "group": {
+                    "type": "string",
+                    "description": "Grade level taking assessment"
+                },
+                "year": {
+                    "type": "number",
+                    "description": "Year the assessment was taken (in the spring)"
+                },
+                "ela_pass_n": {
+                    "type": "number",
+                    "description": "Number of students passing the English / Language Arts portion of the test"
+                },
+                "ela_percent_pass": {
+                    "type": "number",
+                    "description": "Percentage of students passing the English / Language Arts portion of the test"
+                },
+                "math_pass_n": {
+                    "type": "number",
+                    "description": "Number of students passing the Math portion of the test"
+                },
+                "math_percent_pass": {
+                    "type": "number",
+                    "description": "Percent of students passing the Math portion of the test"
+                },
+                "pass_both_percent": {
+                    "type": "number",
+                    "description": "Number of students passing the both portions of the test"
+                },
+                "report_id": {
+                    "type": "number",
+                    "description": "A unique ID for each report entry"
+                }
+            }
+        },
+        "ISTEP_NonPublic_School": {
+            "properties": {
+                "school_id": {
+                    "type": "string",
+                    "description": "School ID as assigned by State of Indiana."
+                },
+                "school_name": {
+                    "type": "string",
+                    "description": "School name as registered in the State of Indiana."
+                },
+                "group": {
+                    "type": "string",
+                    "description": "Grade level taking assessment"
+                },
+                "year": {
+                    "type": "number",
+                    "description": "Year the assessment was taken (in the spring)"
+                },
+                "ela_pass_n": {
+                    "type": "number",
+                    "description": "Number of students passing the English / Language Arts portion of the test"
+                },
+                "ela_percent_pass": {
+                    "type": "number",
+                    "description": "Percentage of students passing the English / Language Arts portion of the test"
+                },
+                "math_pass_n": {
+                    "type": "number",
+                    "description": "Number of students passing the Math portion of the test"
+                },
+                "math_percent_pass": {
+                    "type": "number",
+                    "description": "Percent of students passing the Math portion of the test"
+                },
+                "pass_both_percent": {
+                    "type": "number",
+                    "description": "Number of students passing the both portions of the test"
+                },
+                "report_id": {
+                    "type": "number",
+                    "description": "A unique ID for each report entry"
+                }
+            }
+        },
+        "Corporation_Graduation": {
+            "properties": {
+                "corp_id": {
+                    "type": "number",
+                    "description": "School corporation ID as assigned by State of Indiana."
+                },
+                "corp_name": {
+                    "type": "string",
+                    "description": "School corporation name as registered in the State of Indiana."
+                },
+                "cohort_count": {
+                    "type": "number",
+                    "description": "Number of students enrolled in the specified year and group"
+                },
+                "graduates": {
+                    "type": "number",
+                    "description": "Number of students graduated in the specified year and group"
+                },
+                "grad_rate": {
+                    "type": "number",
+                    "description": "Percentage of students graduated in the specified year and group"
+                },
+                "group": {
+                    "type": "string",
+                    "description": "Various ways of grouping individuals to study trends across socioeconomic bounds",
+                    "enum": [
+                        "american_indian",
+                        "asian",
+                        "black",
+                        "hispanic",
+                        "multiracial",
+                        "pacific_islander",
+                        "white",
+                        "paid_meals",
+                        "reduced_price_meals",
+                        "general_education",
+                        "special_education",
+                        "non_english_language_learner",
+                        "english_language_learner",
+                        "female",
+                        "male",
+                        "total"
+                    ]
+                }
             }
         }
     }
