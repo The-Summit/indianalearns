@@ -37,6 +37,8 @@ $app->group('/api/v1', function() use ($app) {
 		
 		// allow requests from all origins
 		$app->response->headers->set('Access-Control-Allow-Origin', '*');
+		$app->response->headers->set('Access-Control-Allow-Headers', 'Content-Type, api_key, Authorization');
+		$app->response->headers->set('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
 		// set the 404 / route not found handler to something that won't try to output HTML
 		$app->notFound(function() use ($app) {
@@ -44,9 +46,6 @@ $app->group('/api/v1', function() use ($app) {
 				                               array('code'=>404,
 				                                     'message'=>'the requested resource could not be found')));
 			});
-		$app->options('(/(:id))(/(:id2))',function() use ($app){
-			$app->response->headers->set('Allow', 'GET');
-		});
 		$app->get('/(reports)', function() use ($app) {
 				$db = $app->config('db.handle');
 				$q = $db->prepare('SELECT name, location, description, origin_url FROM indianalearns.index');
