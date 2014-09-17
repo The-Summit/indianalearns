@@ -13,7 +13,7 @@
 	$.getJSON("/api/v1/reports",function(data){
 		$.each(data,function(it,entry){
 			if(entry.origin_url.indexOf("http")>-1){
-				$(".{{page}}-content ul").append("<li><a href='" + entry.origin_url + "'>" + entry.origin_url + "</a></li>");
+				$(".{{page}}-content ul").append("<li><a href='" + entry.origin_url + "'>" + entry.description + "</a></li>");
 			};
 		});
 	});
