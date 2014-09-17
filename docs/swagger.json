@@ -1,11 +1,14 @@
 {
-    "swagger": 2.0,
+    "swagger": 2,
     "info": {
         "title": "IndianaLearns API",
         "description": "We believe important conversations about the future of our educational system can be enhanced by utilizing data freely available to the citizens of Indiana. We've organized it here.",
         "version": "1.0.0"
     },
     "host": "indianalearns.info",
+    "schemes": [
+        "http"
+    ],
     "basePath": "/api/v1",
     "produces": [
         "application/json"
@@ -15,94 +18,8 @@
             "get": {
                 "summary": "Corporation Directory",
                 "description": "Directory of all known school districts/corporations",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "School corporation ID as assigned by State of Indiana",
-                        "required": false,
-                        "type": "number"
-                    },
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "School corporation name as registered in the State of Indiana",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "address",
-                        "in": "query",
-                        "description": "Street address of corporation headquarters",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "city",
-                        "in": "query",
-                        "description": "City of corporation headquarters",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "zip",
-                        "in": "query",
-                        "description": "ZIP of corporation headquarters",
-                        "required": false,
-                        "type": "number"
-                    },
-                    {
-                        "name": "grade_span",
-                        "in": "query",
-                        "description": "A span of grades the corporation covers, where KG = Kindergarten, PK = Pre-Kindergarten, and SP & ED = Special Education",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "phone",
-                        "in": "query",
-                        "description": "Phone number of corporation headquarters",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "fax",
-                        "in": "query",
-                        "description": "Fax of corporation headquarters",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "superintendent_name",
-                        "in": "query",
-                        "description": "The name of the superintendent of the corporation",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "superintendent_email",
-                        "in": "query",
-                        "description": "The email of the superintendent of the corporation",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "gis_url",
-                        "in": "query",
-                        "description": "The GIS URL for the maps.indiana.edu entry related to the corporation",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "limit",
-                        "in": "query",
-                        "description": "Maximum number of results to return.",
-                        "required": false,
-                        "type": "integer"
-                    }
-                ],
                 "tags": [
-                    "Corporations"
+                    "corporations"
                 ],
                 "responses": {
                     "200": {
@@ -113,9 +30,66 @@
                     },
                     "404": {
                         "description": "The requested resource could not be found."
+                    }
+                }
+            }
+        },
+        "/corporations/{id}": {
+            "get": {
+                "summary": "Find specific school corporation by ID",
+                "description": "ID is assigned by the State of Indiana",
+                "tags": [
+                    "corporations"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A specific Corporation",
+                        "schema": {
+                            "$ref": "Corporation"
+                        }
                     },
-                    "default": {
-                        "description": "What on earth have you done?"
+                    "404": {
+                        "description": "The requested resource could not be found."
+                    }
+                }
+            }
+        },
+        "/schools": {
+            "get": {
+                "summary": "School Directory",
+                "description": "Directory of all known schools",
+                "tags": [
+                    "schools"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of Schools",
+                        "schema": {
+                            "$ref": "Schools"
+                        }
+                    },
+                    "404": {
+                        "description": "The requested resource could not be found."
+                    }
+                }
+            }
+        },
+        "/schools/{id}": {
+            "get": {
+                "summary": "Find specific school by ID",
+                "description": "ID is assigned by the State of Indiana",
+                "tags": [
+                    "schools"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A specific School",
+                        "schema": {
+                            "$ref": "School"
+                        }
+                    },
+                    "404": {
+                        "description": "The requested resource could not be found."
                     }
                 }
             }
@@ -174,6 +148,68 @@
             "type": "array",
             "items": {
                 "$ref": "Corporation"
+            }
+        },
+        "School": {
+            "properties": {
+                "id": {
+                    "type": "number",
+                    "description": "School ID as assigned by State of Indiana."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "School name as registered in the State of Indiana."
+                },
+                "address": {
+                    "type": "string",
+                    "description": "Street address of school."
+                },
+                "city": {
+                    "type": "string",
+                    "description": "City of school."
+                },
+                "zip": {
+                    "type": "number",
+                    "description": "ZIP of school."
+                },
+                "grade_span": {
+                    "type": "string",
+                    "description": "A span of grades the school covers, where KG = Kindergarten, PK = Pre-Kindergarten, and SP & ED = Special Education."
+                },
+                "phone": {
+                    "type": "string",
+                    "description": "Phone number of schol."
+                },
+                "fax": {
+                    "type": "string",
+                    "description": "Fax of school."
+                },
+                "principal_name": {
+                    "type": "string",
+                    "description": "The name of the principal of the shcool."
+                },
+                "principal_email": {
+                    "type": "string",
+                    "description": "The email of the principal of the shcool."
+                },
+                "gis_url": {
+                    "type": "string",
+                    "description": "The GIS URL for the maps.indiana.edu entry related to the school."
+                },
+                "lat": {
+                    "type": "number",
+                    "description": "The latitude of the school"
+                },
+                "lon": {
+                    "type": "number",
+                    "description": "The longitude of the school"
+                }
+            }
+        },
+        "Schools": {
+            "type": "array",
+            "items": {
+                "$ref": "School"
             }
         }
     }
