@@ -1,4 +1,4 @@
 [submodule "vendor/swagger-ui"]
 	path = vendor/swagger-ui
-	url = git://github.com/wordnik/swagger-ui.gi
+	url = git://github.com/wordnik/swagger-ui.git
 	branch = develop_2.0
