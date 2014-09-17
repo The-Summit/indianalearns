@@ -246,6 +246,29 @@
                     }
                 }
             }
+        },
+        "/reports/school_graduation_rates": {
+            "get": {
+                "summary": "Disaggregated graduation rates by school",
+                "description": "Disaggregated graduation rates by school",
+                "tags": [
+                    "reports"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Disaggregated graduation rates by school",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "School_Graduation"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The requested resource could not be found."
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -528,6 +551,60 @@
                 "report_id": {
                     "type": "number",
                     "description": "A unique ID for each report entry"
+                }
+            }
+        },
+        "School_Graduation": {
+            "properties": {
+                "corp_id": {
+                    "type": "number",
+                    "description": "School corporation ID as assigned by State of Indiana."
+                },
+                "corp_name": {
+                    "type": "string",
+                    "description": "School corporation name as registered in the State of Indiana."
+                },
+                "school_id": {
+                    "type": "number",
+                    "description": "School ID as assigned by State of Indiana."
+                },
+                "school_name": {
+                    "type": "string",
+                    "description": "School name as registered in the State of Indiana."
+                },
+                "cohort_count": {
+                    "type": "number",
+                    "description": "Number of students enrolled in the specified year and group"
+                },
+                "graduates": {
+                    "type": "number",
+                    "description": "Number of students graduated in the specified year and group"
+                },
+                "grad_rate": {
+                    "type": "number",
+                    "description": "Percentage of students graduated in the specified year and group"
+                },
+                "group": {
+                    "type": "string",
+                    "description": "Various ways of grouping individuals to study trends across socioeconomic bounds",
+                    "enum": [
+                        "american_indian",
+                        "asian",
+                        "black",
+                        "hispanic",
+                        "multiracial",
+                        "pacific_islander",
+                        "white",
+                        "paid_meals",
+                        "reduced_price_meals",
+                        "general_education",
+                        "special_education",
+                        "non_english_language_learner",
+                        "english_language_learner",
+                        "female",
+                        "male",
+                        "total"
+                    ]
                 }
             }
         },
