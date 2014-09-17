@@ -1,0 +1,51 @@
+{% extends "base.twig" %}
+{% block content %}
+{{ jumbo.jumbotron(title) }}
+<div class="container-fluid {{page}}-content swagger-section">
+	<div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+</div>
+{% endblock %}
+{% block source %}docs.twig{% endblock %}
+
+{% block footer %}
+<link href='/vendor/swagger-ui/dist/css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
+{% set basedir = "/vendor/swagger-ui/dist/" %}
+{% set scripts = ["shred.bundle.js","jquery.slideto.min.js","jquery.wiggle.min.js","handlebars-1.0.0.js","underscore-min.js","backbone-min.js","swagger.js","swagger-client.js","highlight.7.3.pack.js"] %}
+{% for script in scripts %}
+	<script src="{{basedir}}lib/{{script}}"></script>
+{% endfor %}
+<script src='/assets/js/plugins.js'></script>
+<script src='{{basedir}}swagger-ui.js'></script>
+
+
+  <script type="text/javascript">
+    $(function () {
+      window.swaggerUi = new SwaggerUi({
+      url: "/docs/swagger.json",
+      dom_id: "swagger-ui-container",
+      supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
+      onComplete: function(swaggerApi, swaggerUi){
+        log("Loaded SwaggerUI");
+        $('pre code').each(function(i, e) {
+          hljs.highlightBlock(e)
+        });
+      },
+      onFailure: function(data) {
+        log("Unable to Load SwaggerUI");
+      },
+      docExpansion: "none",
+      sorter : "alpha"
+    });
+
+    $('#input_apiKey').change(function() {
+      var key = $('#input_apiKey')[0].value;
+      log("key: " + key);
+      if(key && key.trim() != "") {
+        log("added key " + key);
+        window.authorizations.add("key", new ApiKeyAuthorization("api_key", key, "query"));
+      }
+    })
+    window.swaggerUi.load();
+  });
+  </script>
+{% endblock %}
