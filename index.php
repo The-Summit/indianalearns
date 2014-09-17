@@ -136,6 +136,7 @@ $app->group('/api/v1', function() use ($app) {
 					'istep_corporations'      === $report ||
 					'istep_schools_public'    === $report ||
 					'istep_schools_nonpublic' === $report ||
+					'school_graduation_rates' === $report ||
 					'corporation_graduation_rates' === $report
 				) {
 					$table = 'report_'.$report;
