@@ -2,21 +2,24 @@
 	#api_info{
 		display: none;
 	}
-	h1,h3{
-		font-family: @bigfont;
-		text-transform: uppercase;
-		font-weight: 700;
-		color: #fff;	
+	.swagger-ui-wrap{
+		ul#resources{
+			li.resource div.heading{
+				h2{
+					font-size: 	@font-size-h2;
+					font-family: @bigfont;
+					text-transform: uppercase;
+					font-weight: 700;
+				}
+				h3{
+					text-transform: none;
+					font-weight: 400;
+				}
+				ul.options{
+					display: none;
+				}
+			}
+		}
 	}
-	.swagger-ui-wrap ul#resources li.resource div.heading h2{
-		font-family: @headings-font-family;
-		font-size: 	@font-size-h2;
-	}
-	h2,h3,h4,h5,h6,p{
-		text-transform: none;	
-		font-weight: 400;
-	}
-	.options{
-		display: none;
-	}
+
 }

@@ -38,6 +38,15 @@
             "get": {
                 "summary": "Find specific school corporation by ID",
                 "description": "ID is assigned by the State of Indiana",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "School corporation ID as assigned by State of Indiana.",
+                        "required": true,
+                        "type": "number"
+                    }
+                ],
                 "tags": [
                     "corporations"
                 ],
@@ -80,6 +89,15 @@
                 "description": "ID is assigned by the State of Indiana",
                 "tags": [
                     "schools"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "School ID as assigned by State of Indiana.",
+                        "required": true,
+                        "type": "number"
+                    }
                 ],
                 "responses": {
                     "200": {
