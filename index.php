@@ -64,11 +64,11 @@ $app->group('/api/v1', function() use ($app) {
 				$db = $app->config('db.handle');
 
 				if($id == null) {
-					$q = $db->prepare('SELECT * FROM indianalearns.directory_corp');
+					$q = $db->prepare('SELECT * FROM indianalearns.directory_corporation');
 					$q->setFetchMode(PDO::FETCH_ASSOC);
 					$q->execute();
 				} else {
-					$q = $db->prepare('SELECT * FROM indianalearns.directory_corp WHERE id = ?');
+					$q = $db->prepare('SELECT * FROM indianalearns.directory_corporation WHERE id = ?');
 					$q->setFetchMode(PDO::FETCH_ASSOC);
 					$q->execute(array($id));
 				}
@@ -90,7 +90,7 @@ $app->group('/api/v1', function() use ($app) {
 		$app->get('/schools(/(:id))', function($id=null) use ($app) {
 				$db = $app->config('db.handle');
 
-				$sql = 'SELECT * FROM indianalearns.directory_schools';
+				$sql = 'SELECT * FROM indianalearns.directory_school';
 
 				if($id != null) {
 					$sql .= ' WHERE id = :id';
@@ -133,11 +133,11 @@ $app->group('/api/v1', function() use ($app) {
 
 		$app->get('/reports/:report', function($report) use ($app) {
 				if(
-					'istep_corporations'      === $report ||
-					'istep_schools_public'    === $report ||
-					'istep_schools_nonpublic' === $report ||
+					'corporation_istep'      === $report ||
+					'school_public_istep'    === $report ||
+					'school_nonpublic_istep' === $report ||
 					'school_graduation_rates' === $report ||
-					'school_finances' === $report ||
+					'corporation_budget' === $report ||
 					'corporation_graduation_rates' === $report ||
 					'corporation_enrollment' === $report
 				) {

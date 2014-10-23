@@ -35,7 +35,7 @@
 			grade = $("[name=grade] :selected").val(),
 			score = Number($("[name=score]").val().replace("%",""))*.01,
 			subject	= $("[name=subject] :selected").val();
-			$.getJSON("//indianalearns.info/api/v1/reports/istep_schools_public?group=" + grade + "&year=" + year + "&limit=999999",function(data){
+			$.getJSON("//indianalearns.info/api/v1/reports/school_public_istep?group=" + grade + "&year=" + year + "&limit=999999",function(data){
 				var params = {
 					"grade"	: grade,
 				 "score"	: score,
