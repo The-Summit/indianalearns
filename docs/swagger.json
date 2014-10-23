@@ -18,6 +18,20 @@
             "get": {
                 "summary": "Corporation Directory",
                 "description": "Directory of all known school districts/corporations",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of results (default 100)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Used in conjunction with the limit parameter to offset the results",
+                        "type": "number"
+                    }
+                ],
                 "tags": [
                     "corporations"
                 ],
@@ -155,7 +169,7 @@
                 }
             }
         },
-        "/reports/istep_corporations": {
+        "/reports/corporation_istep": {
             "get": {
                 "summary": "ISTEP+ results at the school district/corporation level",
                 "description": "ISTEP+ results at the school district/corporation level, grouped by year and grade",
@@ -178,7 +192,7 @@
                 }
             }
         },
-        "/reports/istep_schools_public": {
+        "/reports/school_public_istep": {
             "get": {
                 "summary": "ISTEP+ results for public schools",
                 "description": "ISTEP+ results for public schools",
@@ -201,7 +215,7 @@
                 }
             }
         },
-        "/reports/istep_schools_nonpublic": {
+        "/reports/school_nonpublic_istep": {
             "get": {
                 "summary": "ISTEP+ results for nonpublic schools",
                 "description": "ISTEP+ results for nonpublic schools",
