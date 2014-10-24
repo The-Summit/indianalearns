@@ -174,9 +174,11 @@ $app->group('/api/v1', function() use ($app) {
 				$sql_params = array();
 
 				// iterate over queryable fields
+				$has_account_fk = false;
 				while($row = $q->fetch()) {
 					// see if the request included a parameter matching this queryable field
 					$col = $row['COLUMN_NAME'];
+					if($col==="account_id"){$has_account_fk=true;}
 					$request_field = $app->request->params($col);
 					if(!empty($request_field)) {
 						// TODO: test for comparison operators, >, >=, etc
@@ -184,7 +186,9 @@ $app->group('/api/v1', function() use ($app) {
 						$sql_clauses[]= '`' . $col . '`' . ' = :' . $col;  // something like 'corp_id = :corp_id'
 					}
 				}
-
+				if($has_account_fk){
+					$sql .= ' JOIN corporation_budget_accounts ON ' . $table . '.account_id = corporation_budget_accounts.account_id ';
+				}
 				if(!empty($sql_clauses)) {
 					$sql .= ' WHERE ';
 					$sql .= implode(' AND ', $sql_clauses);
