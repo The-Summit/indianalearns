@@ -142,18 +142,16 @@ $app->group('/api/v1', function() use ($app) {
 				echo prepare_json_output($results);
 			});
 
-		$app->get('/reports/:report', function($report) use ($app) {
+		$app->get('/reports/:entity/:report', function($entity,$report) use ($app) {
+				$corp_reports = array ('istep','budget','graduation_rates','enrollment');
+				$school_reports = array ('graduation_rates','enrollment');
 				if(
-					'corporation_istep'      === $report ||
+					'corporation' === $entity && in_array($report,$corp_reports) ||
+					'school' === $entity && in_array($report,$school_reports) ||
 					'school_public_istep'    === $report ||
-					'school_nonpublic_istep' === $report ||
-					'school_graduation_rates' === $report ||
-					'corporation_budget' === $report ||
-					'corporation_graduation_rates' === $report ||
-					'corporation_enrollment' === $report ||
-					'school_enrollment' === $report
+					'school_nonpublic_istep' === $report
 				) {
-					$table = 'report_'.$report;
+					$table = 'report_' . $entity . '_' . $report;
 				} else {
 					$app->halt(404, array('error'=>
 					                      array('code'=>404,
