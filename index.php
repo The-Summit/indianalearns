@@ -144,12 +144,10 @@ $app->group('/api/v1', function() use ($app) {
 
 		$app->get('/reports/:entity/:report', function($entity,$report) use ($app) {
 				$corp_reports = array ('istep','budget','graduation_rates','enrollment');
-				$school_reports = array ('graduation_rates','enrollment');
+				$school_reports = array ('graduation_rates','enrollment','public_istep','nonpublic_istep');
 				if(
 					'corporation' === $entity && in_array($report,$corp_reports) ||
-					'school' === $entity && in_array($report,$school_reports) ||
-					'school_public_istep'    === $report ||
-					'school_nonpublic_istep' === $report
+					'school' === $entity && in_array($report,$school_reports)
 				) {
 					$table = 'report_' . $entity . '_' . $report;
 				} else {

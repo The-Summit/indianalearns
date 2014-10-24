@@ -145,30 +145,7 @@
                 }
             }
         },
-        "/reports": {
-            "get": {
-                "summary": "School & Corporation reports",
-                "description": "Index of available reports",
-                "tags": [
-                    "reports"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Index of available reports",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "Report"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "The requested resource could not be found."
-                    }
-                }
-            }
-        },
-        "/reports/corporation_istep": {
+        "/reports/corporation/istep": {
             "get": {
                 "summary": "ISTEP+ results at the school district/corporation level",
                 "description": "ISTEP+ results at the school district/corporation level, grouped by year and grade",                
@@ -187,7 +164,7 @@
                     }
                 ],
                 "tags": [
-                    "reports"
+                    "reports/corporation"
                 ],
                 "responses": {
                     "200": {
@@ -205,7 +182,7 @@
                 }
             }
         },
-        "/reports/school_public_istep": {
+        "/reports/school/public_istep": {
             "get": {
                 "summary": "ISTEP+ results for public schools",
                 "description": "ISTEP+ results for public schools",
@@ -224,7 +201,7 @@
                     }
                 ],                
                 "tags": [
-                    "reports"
+                    "reports/school"
                 ],
                 "responses": {
                     "200": {
@@ -242,7 +219,7 @@
                 }
             }
         },
-        "/reports/school_nonpublic_istep": {
+        "/reports/school/nonpublic_istep": {
             "get": {
                 "summary": "ISTEP+ results for nonpublic schools",
                 "description": "ISTEP+ results for nonpublic schools",
@@ -261,7 +238,7 @@
                     }
                 ],                
                 "tags": [
-                    "reports"
+                    "reports/school"
                 ],
                 "responses": {
                     "200": {
@@ -279,7 +256,7 @@
                 }
             }
         },
-        "/reports/corporation_graduation_rates": {
+        "/reports/corporation/graduation_rates": {
             "get": {
                 "summary": "Disaggregated graduation rates by corporation",
                 "description": "Disaggregated graduation rates by corporation",
@@ -298,7 +275,7 @@
                     }
                 ],                
                 "tags": [
-                    "reports"
+                    "reports/corporation"
                 ],
                 "responses": {
                     "200": {
@@ -316,7 +293,7 @@
                 }
             }
         },
-        "/reports/school_graduation_rates": {
+        "/reports/school/graduation_rates": {
             "get": {
                 "summary": "Disaggregated graduation rates by school",
                 "description": "Disaggregated graduation rates by school",
@@ -335,7 +312,7 @@
                     }
                 ],                
                 "tags": [
-                    "reports"
+                    "reports/school"
                 ],
                 "responses": {
                     "200": {
@@ -353,7 +330,7 @@
                 }
             }
         },
-        "/reports/corporation_enrollment": {
+        "/reports/corporation/enrollment": {
             "get": {
                 "summary": "Corporation enrollment by grade",
                 "description": "Corporation enrollment by grade",
@@ -372,7 +349,7 @@
                     }
                 ],                
                 "tags": [
-                    "reports"
+                    "reports/corporation"
                 ],
                 "responses": {
                     "200": {
@@ -390,7 +367,7 @@
                 }
             }
         },
-        "/reports/school_enrollment": {
+        "/reports/school/enrollment": {
             "get": {
                 "summary": "School enrollment by grade",
                 "description": "School enrollment by grade",
@@ -409,7 +386,7 @@
                     }
                 ],                
                 "tags": [
-                    "reports"
+                    "reports/school"
                 ],
                 "responses": {
                     "200": {
