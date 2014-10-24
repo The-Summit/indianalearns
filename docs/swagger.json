@@ -842,7 +842,7 @@
                 "account_id" : {
                 		"type" : "number",
                 		"description" : "State-standard account code"
-                }
+                },
 					"name" : {
                 		"type" : "string",
                 		"description" : "State-standard account name"
