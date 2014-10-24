@@ -205,11 +205,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Index of all ISTEP+ results at district/corporation level",
+                        "description": "Corporation state budget filings (Form 4A)",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "ISTEP_Corp"
+                                "$ref": "Corporation_Budget"
                             }
                         }
                     },
@@ -825,6 +825,31 @@
                 }
             }
         },
+        "Corporation_Budget": {
+            "properties": {
+                "corp_id": {
+                    "type": "number",
+                    "description": "School corporation ID as assigned by State of Indiana."
+                },
+                "corp_name": {
+                    "type": "string",
+                    "description": "School corporation name as registered in the State of Indiana."
+                },
+                "total": {
+                    "type": "number",
+                    "description": "Budget requested"
+                },
+                "account_id" : {
+                		"type" : "number",
+                		"description" : "State-standard account code"
+                }
+					"name" : {
+                		"type" : "string",
+                		"description" : "State-standard account name"
+                }
+
+            }
+        },        
         "Corporation_Enrollment": {
             "properties": {
                 "1": {
