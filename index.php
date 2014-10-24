@@ -150,7 +150,8 @@ $app->group('/api/v1', function() use ($app) {
 					'school_graduation_rates' === $report ||
 					'corporation_budget' === $report ||
 					'corporation_graduation_rates' === $report ||
-					'corporation_enrollment' === $report
+					'corporation_enrollment' === $report ||
+					'school_enrollment' === $report
 				) {
 					$table = 'report_'.$report;
 				} else {

@@ -5,7 +5,6 @@
         "description": "We believe important conversations about the future of our educational system can be enhanced by utilizing data freely available to the citizens of Indiana. We've organized it here.",
         "version": "1.0.0"
     },
-    "host": "",
     "schemes": [
         "http"
     ],
@@ -172,7 +171,21 @@
         "/reports/corporation_istep": {
             "get": {
                 "summary": "ISTEP+ results at the school district/corporation level",
-                "description": "ISTEP+ results at the school district/corporation level, grouped by year and grade",
+                "description": "ISTEP+ results at the school district/corporation level, grouped by year and grade",                
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of results (default 100)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Used in conjunction with the limit parameter to offset the results",
+                        "type": "number"
+                    }
+                ],
                 "tags": [
                     "reports"
                 ],
@@ -196,6 +209,20 @@
             "get": {
                 "summary": "ISTEP+ results for public schools",
                 "description": "ISTEP+ results for public schools",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of results (default 100)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Used in conjunction with the limit parameter to offset the results",
+                        "type": "number"
+                    }
+                ],                
                 "tags": [
                     "reports"
                 ],
@@ -219,6 +246,20 @@
             "get": {
                 "summary": "ISTEP+ results for nonpublic schools",
                 "description": "ISTEP+ results for nonpublic schools",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of results (default 100)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Used in conjunction with the limit parameter to offset the results",
+                        "type": "number"
+                    }
+                ],                
                 "tags": [
                     "reports"
                 ],
@@ -242,6 +283,20 @@
             "get": {
                 "summary": "Disaggregated graduation rates by corporation",
                 "description": "Disaggregated graduation rates by corporation",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of results (default 100)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Used in conjunction with the limit parameter to offset the results",
+                        "type": "number"
+                    }
+                ],                
                 "tags": [
                     "reports"
                 ],
@@ -265,6 +320,20 @@
             "get": {
                 "summary": "Disaggregated graduation rates by school",
                 "description": "Disaggregated graduation rates by school",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of results (default 100)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Used in conjunction with the limit parameter to offset the results",
+                        "type": "number"
+                    }
+                ],                
                 "tags": [
                     "reports"
                 ],
@@ -275,6 +344,80 @@
                             "type": "array",
                             "items": {
                                 "$ref": "School_Graduation"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The requested resource could not be found."
+                    }
+                }
+            }
+        },
+        "/reports/corporation_enrollment": {
+            "get": {
+                "summary": "Corporation enrollment by grade",
+                "description": "Corporation enrollment by grade",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of results (default 100)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Used in conjunction with the limit parameter to offset the results",
+                        "type": "number"
+                    }
+                ],                
+                "tags": [
+                    "reports"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Corporation enrollment by grade",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "Corporation_Enrollment"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The requested resource could not be found."
+                    }
+                }
+            }
+        },
+        "/reports/school_enrollment": {
+            "get": {
+                "summary": "School enrollment by grade",
+                "description": "School enrollment by grade",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of results (default 100)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Used in conjunction with the limit parameter to offset the results",
+                        "type": "number"
+                    }
+                ],                
+                "tags": [
+                    "reports"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "School enrollment by grade",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "Corporation_Enrollment"
                             }
                         }
                     },
@@ -665,6 +808,162 @@
                         "male",
                         "total"
                     ]
+                }
+            }
+        },
+        "Corporation_Enrollment": {
+            "properties": {
+                "1": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 1"
+                },
+                "2": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 2"
+                },
+                "3": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 3"
+                },
+                "4": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 4"
+                },
+                "5": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 5"
+                },
+                "6": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 6"
+                },
+                "7": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 7"
+                },
+                "8": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 8"
+                },
+                "9": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 9"
+                },
+                "10": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 10"
+                },
+                "11": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 11"
+                },
+                "12": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 12"
+                },
+                "corp_id": {
+                    "type": "number",
+                    "description": "School corporation ID as assigned by State of Indiana."
+                },
+                "prek": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Pre-K"
+                },
+                "k": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Kindergarten"
+                },
+                "12+": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 12+"
+                },
+                "total": {
+                    "type": "number",
+                    "description": "Total number of students enrolled"
+                },
+                "year": {
+                    "type": "number",
+                    "description": "Year of report"
+                }
+            }
+        },
+        "School_Enrollment": {
+            "properties": {
+                "1": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 1"
+                },
+                "2": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 2"
+                },
+                "3": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 3"
+                },
+                "4": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 4"
+                },
+                "5": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 5"
+                },
+                "6": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 6"
+                },
+                "7": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 7"
+                },
+                "8": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 8"
+                },
+                "9": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 9"
+                },
+                "10": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 10"
+                },
+                "11": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 11"
+                },
+                "12": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 12"
+                },
+                "corp_id": {
+                    "type": "number",
+                    "description": "School corporation ID as assigned by State of Indiana."
+                },
+                "school_id": {
+                    "type": "number",
+                    "description": "School ID as assigned by State of Indiana."
+                },
+                "prek": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Pre-K"
+                },
+                "k": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Kindergarten"
+                },
+                "12+": {
+                    "type": "number",
+                    "description": "Number of students enrolled in Grade 12+"
+                },
+                "total": {
+                    "type": "number",
+                    "description": "Total number of students enrolled"
+                },
+                "year": {
+                    "type": "number",
+                    "description": "Year of report"
                 }
             }
         }
