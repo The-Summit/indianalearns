@@ -184,7 +184,7 @@ $app->group('/api/v1', function() use ($app) {
 					if($col==="corp_id"){$has_corp_id=true;}
 					if($col==="school_id"){$has_school_id=true;}
 					$request_field = $app->request->params($col);
-					if(!empty($request_field)) {
+					if(isset($request_field)) {
 						$sql_params[$col] = $request_field;    // $sql_params['corp_id'] = $app->request->params('corp_id');
 						$op = "=";
 						$delim = "...";
