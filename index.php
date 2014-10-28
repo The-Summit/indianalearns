@@ -180,14 +180,14 @@ $app->group('/api/v1', function() use ($app) {
 				while($row = $q->fetch()) {
 					// see if the request included a parameter matching this queryable field
 					$col = $row['COLUMN_NAME'];
-					if($col==="account_id"){$has_account_fk=true;}
+					if($col==="account_id"){$has_account_id=true;}
 					if($col==="corp_id"){$has_corp_id=true;}
 					if($col==="school_id"){$has_school_id=true;}
 					$request_field = $app->request->params($col);
 					if(!empty($request_field)) {
 						// TODO: test for comparison operators, >, >=, etc
 						$sql_params[$col] = $request_field;    // $sql_params['corp_id'] = $app->request->params('corp_id');
-						$sql_clauses[]= '`' . $col . '`' . ' = :' . $col;  // something like 'corp_id = :corp_id'
+						$sql_clauses[]= $table . '.' . $col . ' = :' . $col;  // something like 'corp_id = :corp_id'
 					}
 				}
 				if($has_account_fk){

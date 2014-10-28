@@ -917,9 +917,13 @@
                 		"type" : "number",
                 		"description" : "State-standard account code"
                 },
-					"name" : {
+					"account_name" : {
                 		"type" : "string",
                 		"description" : "State-standard account name"
+                },
+                "year" : {
+                		"type" : "number",
+                		"description" : "Year of budget request"
                 }
 
             }
