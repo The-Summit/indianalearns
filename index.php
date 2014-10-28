@@ -244,7 +244,6 @@ $app->group('/api/v1', function() use ($app) {
 				foreach($sql_params as $key=>$value) {
 					$q->bindValue(':'.$key, $value);
 				}
-echo $q->queryString;
 				$q->execute();
 
 				$results = array();
