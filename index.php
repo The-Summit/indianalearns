@@ -143,8 +143,8 @@ $app->group('/api/v1', function() use ($app) {
 			});
 
 		$app->get('/reports/:entity/:report', function($entity,$report) use ($app) {
-				$corp_reports = array ('istep','budget','graduation_rates','enrollment');
-				$school_reports = array ('graduation_rates','enrollment','public_istep','nonpublic_istep');
+				$corp_reports = array ('istep','budget','graduation_rates','enrollment','iread');
+				$school_reports = array ('graduation_rates','enrollment','public_istep','nonpublic_istep','iread');
 				if(
 					'corporation' === $entity && in_array($report,$corp_reports) ||
 					'school' === $entity && in_array($report,$school_reports)
@@ -175,10 +175,14 @@ $app->group('/api/v1', function() use ($app) {
 
 				// iterate over queryable fields
 				$has_account_fk = false;
+				$has_corp_id = false;
+				$has_school_id = false;
 				while($row = $q->fetch()) {
 					// see if the request included a parameter matching this queryable field
 					$col = $row['COLUMN_NAME'];
 					if($col==="account_id"){$has_account_fk=true;}
+					if($col==="corp_id"){$has_corp_id=true;}
+					if($col==="school_id"){$has_school_id=true;}
 					$request_field = $app->request->params($col);
 					if(!empty($request_field)) {
 						// TODO: test for comparison operators, >, >=, etc
@@ -187,15 +191,21 @@ $app->group('/api/v1', function() use ($app) {
 					}
 				}
 				if($has_account_fk){
-					$sql .= ' JOIN corporation_budget_accounts ON ' . $table . '.account_id = corporation_budget_accounts.account_id ';
+					$sql .= ' LEFT OUTER JOIN corporation_budget_accounts ON ' . $table . '.account_id = corporation_budget_accounts.account_id ';
 				}
+				if($has_corp_id){
+					$sql .= ' LEFT OUTER JOIN (SELECT name corp_name,id corp_id FROM directory_corporation) c ON ' . $table . '.corp_id = c.corp_id ';
+				}
+				if($has_school_id){
+					$sql .= ' LEFT OUTER JOIN (SELECT name school_name,id school_id FROM directory_school) s ON ' . $table . '.school_id = s.school_id ';
+				}					
 				if(!empty($sql_clauses)) {
 					$sql .= ' WHERE ';
 					$sql .= implode(' AND ', $sql_clauses);
 				}
 				$sql .= ' LIMIT :offset,:limit';
 				// $sql is now complete
-				
+
 				// prepare query object and start binding values
 				$q = $db->prepare($sql);
 				$q->setFetchMode(PDO::FETCH_ASSOC);
