@@ -174,7 +174,7 @@ $app->group('/api/v1', function() use ($app) {
 				$sql_params = array();
 
 				// iterate over queryable fields
-				$has_account_fk = false;
+				$has_account_id = false;
 				$has_corp_id = false;
 				$has_school_id = false;
 				while($row = $q->fetch()) {
@@ -185,12 +185,28 @@ $app->group('/api/v1', function() use ($app) {
 					if($col==="school_id"){$has_school_id=true;}
 					$request_field = $app->request->params($col);
 					if(!empty($request_field)) {
-						// TODO: test for comparison operators, >, >=, etc
 						$sql_params[$col] = $request_field;    // $sql_params['corp_id'] = $app->request->params('corp_id');
-						$sql_clauses[]= $table . '.' . $col . ' = :' . $col;  // something like 'corp_id = :corp_id'
+						$op = "=";
+						$delim = "...";
+						if(strpos($sql_params[$col],$delim)===0){ // less than
+							$op = "<=";
+							$sql_params[$col] = str_replace($delim,"",$sql_params[$col]);
+							$sql_clauses[]= $table . '.' . $col . ' ' . $op . ' :' . $col;  // something like 'corp_id = :corp_id'
+						}elseif(substr($sql_params[$col],-strlen($delim))===$delim){ // greater than
+							$op = ">=";
+							$sql_params[$col] = str_replace($delim,"",$sql_params[$col]);
+							$sql_clauses[]= $table . '.' . $col . ' ' . $op . ' :' . $col;  // something like 'corp_id = :corp_id'
+						}elseif(strpos($sql_params[$col],$delim)>0){ // between two numbers
+							$ex = explode($delim,$sql_params[$col]);
+							$sql_params["low"] = $ex[0];
+							$sql_params["high"] = $ex[1];
+							unset($sql_params[$col]); // remove the original column because we're using low & high range now
+							$sql_clauses[]= $table . '.' . $col . " BETWEEN :low AND :high ";  // something like 'corp_id = :corp_id'
+						}
+					
 					}
 				}
-				if($has_account_fk){
+				if($has_account_id){
 					$sql .= ' LEFT OUTER JOIN corporation_budget_accounts ON ' . $table . '.account_id = corporation_budget_accounts.account_id ';
 				}
 				if($has_corp_id){
@@ -226,7 +242,7 @@ $app->group('/api/v1', function() use ($app) {
 				foreach($sql_params as $key=>$value) {
 					$q->bindValue(':'.$key, $value);
 				}
-
+echo $q->queryString;
 				$q->execute();
 
 				$results = array();
