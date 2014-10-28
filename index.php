@@ -191,17 +191,19 @@ $app->group('/api/v1', function() use ($app) {
 						if(strpos($sql_params[$col],$delim)===0){ // less than
 							$op = "<=";
 							$sql_params[$col] = str_replace($delim,"",$sql_params[$col]);
-							$sql_clauses[]= $table . '.' . $col . ' ' . $op . ' :' . $col;  // something like 'corp_id = :corp_id'
+							$sql_clauses[]= $table . '.' . $col . ' ' . $op . ' :' . $col;  // something like 'corp_id <= :corp_id'
 						}elseif(substr($sql_params[$col],-strlen($delim))===$delim){ // greater than
 							$op = ">=";
 							$sql_params[$col] = str_replace($delim,"",$sql_params[$col]);
-							$sql_clauses[]= $table . '.' . $col . ' ' . $op . ' :' . $col;  // something like 'corp_id = :corp_id'
+							$sql_clauses[]= $table . '.' . $col . ' ' . $op . ' :' . $col;  // something like 'corp_id >= :corp_id'
 						}elseif(strpos($sql_params[$col],$delim)>0){ // between two numbers
-							$ex = explode($delim,$sql_params[$col]);
-							$sql_params["low"] = $ex[0];
-							$sql_params["high"] = $ex[1];
-							unset($sql_params[$col]); // remove the original column because we're using low & high range now
-							$sql_clauses[]= $table . '.' . $col . " BETWEEN :low AND :high ";  // something like 'corp_id = :corp_id'
+							$ex = explode($delim,$sql_params[$col]); //break range into 2 values
+							$sql_params[$col . "_low"] = $ex[0]; //set low value
+							$sql_params[$col . "_high"] = $ex[1]; //set high value
+							unset($sql_params[$col]); // remove the original column because we're using low & high values now
+							$sql_clauses[]= $table . '.' . $col . " BETWEEN :" . $col . "_low AND :" . $col . "_high "; //add the clause
+						}else{
+							$sql_clauses[]= $table . '.' . $col . ' ' . $op . ' :' . $col;  // something like 'corp_id = :corp_id'
 						}
 					
 					}
