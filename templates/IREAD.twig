@@ -1,0 +1,28 @@
+{% extends "base.twig" %}
+{% block content %}
+<div id="loading-overlay" class="modal">
+	<div class="spinner">
+	  <div class="double-bounce1"></div>
+	  <div class="double-bounce2"></div>
+	</div>
+</div>
+<div class="col-md-6 col-md-offset-3">
+	<h2>IREAD-3 - 3rd Grade Reading Proficiency</h2>
+	<p>The purpose of the Indiana Reading Evaluation And Determination (IREAD-3) assessment is to measure foundational reading standards through grade three. Based on the Indiana Academic Standards, IREAD-3 is a summative assessment that was developed in accordance with House Enrolled Act 1367 (also known as Public Law 109 in 2010), which "requires the evaluation of reading skills for students who are in grade three beginning in the Spring of 2012 to ensure that all students can read proficiently before moving on to grade four."</p>
+	<p>To learn more about this assessment, please visit the <a target="_blank" href="http://www.doe.in.gov/assessment/iread-3">Indiana Department of Education</a>.</p>
+	<div>
+		<div class="col-md-6"><input type="text" class="form-control typeahead" placeholder="Enter school..."></div>
+	</div>
+</div>
+<div class="col-md-6 col-md-offset-3">
+	<h2 style="text-align:center">% of Students Reading at Grade Level</h2>
+	<canvas id="chart" width="400" height"400" class="col-md-12"></canvas>
+</div>
+{% endblock %}
+
+{% block footer %}
+	<script src="/vendor/components/handlebars.js/handlebars.min.js" /></script>
+	<script src="/vendor/nnnick/chartjs/Chart.min.js" /></script>
+	<script src="/vendor/twitter/typeahead.js/dist/typeahead.bundle.min.js" /></script>
+	<script src="/assets/js/IREAD.js" /></script>
+{% endblock %}
