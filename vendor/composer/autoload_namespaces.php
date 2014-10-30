@@ -7,9 +7,12 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
+    'Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'Slim\\Views' => array($vendorDir . '/slim/views'),
     'Slim' => array($vendorDir . '/slim/slim'),
     'Michelf' => array($vendorDir . '/michelf/php-markdown'),
     'Less' => array($vendorDir . '/oyejorge/less.php/lib'),
+    'ComponentInstaller' => array($vendorDir . '/robloach/component-installer/src'),
+    'Assetic' => array($vendorDir . '/kriswallsmith/assetic/src'),
     'Aptoma' => array($vendorDir . '/aptoma/twig-markdown/src'),
 );

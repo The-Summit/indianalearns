@@ -7,6 +7,9 @@
 	"twbs/bootstrap" : ">=3.2.0",
 	"aptoma/twig-markdown": "1.0.0",
 	"michelf/php-markdown": "1.4.1",
-	"oyejorge/less.php": "~1.5"
+	"oyejorge/less.php": "~1.5",
+	"nnnick/chartjs": "1.0.1.*@dev",
+	"twitter/typeahead.js" : "0.10.5",
+	"components/handlebars.js" : "2.*"
     }
 }

@@ -11,7 +11,7 @@
 	markers = [];
 	schools = [];
 	setInitialLocation();
-	$.getJSON("//indianalearns.info/api/v1/schools?limit=999999",function(data){
+	$.getJSON("/api/v1/schools?limit=999999&category=public",function(data){
 		schools = data;
 		setControlEvents();
 	});	
@@ -35,7 +35,7 @@
 			grade = $("[name=grade] :selected").val(),
 			score = Number($("[name=score]").val().replace("%",""))*.01,
 			subject	= $("[name=subject] :selected").val();
-			$.getJSON("//indianalearns.info/api/v1/reports/school_public_istep?group=" + grade + "&year=" + year + "&limit=999999",function(data){
+			$.getJSON("/api/v1/reports/school/public_istep?group=" + grade + "&year=" + year + "&limit=999999",function(data){
 				var params = {
 					"grade"	: grade,
 				 "score"	: score,
