@@ -8,8 +8,8 @@ $app = new \Slim\Slim(array(
 	'db.user' => INDIANALEARNS_DB_USER,
 	'db.pass' => INDIANALEARNS_DB_PASS,
 
-	'db.handle' => new PDO('mysql:host='.INDIANALEARNS_DB_HOST.';dbname=indianalearns', 
-	                       INDIANALEARNS_DB_USER, 
+	'db.handle' => new PDO('mysql:host='.INDIANALEARNS_DB_HOST.';dbname=indianalearns',
+	                       INDIANALEARNS_DB_USER,
 	                       INDIANALEARNS_DB_PASS,
 	                       array(PDO::ATTR_PERSISTENT => true)),
 
@@ -34,7 +34,7 @@ $app->group('/home', 'prepForHumans', function() use ($app){
 $app->group('/api/v1', function() use ($app) {
 		// all api output is JSON
 		$app->response->headers->set('Content-Type', 'application/json;charset=utf8');
-		
+
 		// allow requests from all origins
 		$app->response->headers->set('Access-Control-Allow-Origin', '*');
 		$app->response->headers->set('Access-Control-Allow-Headers', 'Content-Type, api_key, Authorization');
@@ -69,10 +69,10 @@ $app->group('/api/v1', function() use ($app) {
 					$q = $db->prepare('SELECT * FROM indianalearns.directory_corporation WHERE id = :id LIMIT :offset,:limit');
 				}
 				$q->setFetchMode(PDO::FETCH_ASSOC);
-				
+
 				if($id) {
 					$q->bindValue(':id', $id);
-				}				
+				}
 				$limit = $app->request->params('limit');
 				$offset = $app->request->params('offset');
 				if(empty($limit)) {
@@ -86,12 +86,12 @@ $app->group('/api/v1', function() use ($app) {
 				$q->execute();
 				$results = array();
 				while($row = $q->fetch()) {
-					$row['gis_url'] = 
+					$row['gis_url'] =
 						'http://maps.indiana.edu/arcgis/rest/services/Infrastructure'
 						.'/Schools_Districts_2013_USCB/Mapserver/0/query'
 						.'?text='.str_replace(' ', '+', $row['name'])
 						.'&f=json';
-					
+
 					array_push($results, $row);
 				}
 
@@ -127,11 +127,11 @@ $app->group('/api/v1', function() use ($app) {
 				}
 
 				$q->execute();
-								
+
 				$results = array();
 				while($row = $q->fetch()) {
 					// add a link to the arcgis service at maps.indiana.edu
-					$row['gis_url'] = 
+					$row['gis_url'] =
 						'http://maps.indiana.edu/arcgis/rest/services/Infrastructure'
 						.'/Schools_IDOE/Mapserver/0/query'
 						.'?where=IDOE_ID+%3D+\''.(str_pad($row['id'], 4, '0', STR_PAD_LEFT)).'\''
@@ -143,8 +143,8 @@ $app->group('/api/v1', function() use ($app) {
 			});
 
 		$app->get('/reports/:entity/:report', function($entity,$report) use ($app) {
-				$corp_reports = array ('istep','budget','graduation_rates','enrollment','iread');
-				$school_reports = array ('graduation_rates','enrollment','public_istep','nonpublic_istep','iread');
+				$corp_reports = array ('istep','budget','graduation_rates','enrollment','iread','attendance');
+				$school_reports = array ('graduation_rates','enrollment','public_istep','nonpublic_istep','iread','attendance');
 				if(
 					'corporation' === $entity && in_array($report,$corp_reports) ||
 					'school' === $entity && in_array($report,$school_reports)
@@ -155,7 +155,7 @@ $app->group('/api/v1', function() use ($app) {
 					                      array('code'=>404,
 					                            'message'=>'the requested resource could not be found')));
 				}
-				
+
 				$db = $app->config('db.handle');
 
 				$sql = 'SELECT'
@@ -205,7 +205,7 @@ $app->group('/api/v1', function() use ($app) {
 						}else{
 							$sql_clauses[]= $table . '.' . $col . ' ' . $op . ' :' . $col;  // something like 'corp_id = :corp_id'
 						}
-					
+
 					}
 				}
 				if($has_account_id){
@@ -216,7 +216,8 @@ $app->group('/api/v1', function() use ($app) {
 				}
 				if($has_school_id){
 					$sql .= ' LEFT OUTER JOIN (SELECT name school_name,id school_id FROM directory_school) s ON ' . $table . '.school_id = s.school_id ';
-				}					
+				}
+
 				if(!empty($sql_clauses)) {
 					$sql .= ' WHERE ';
 					$sql .= implode(' AND ', $sql_clauses);
