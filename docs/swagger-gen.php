@@ -160,6 +160,7 @@ while($row = $q->fetch()) {
     $tags = array();
 
     $parameters = array();
+    $return_items = array();
 
     // api query parameters are determined based on table columns, so we'll query the INFORMATION_SCHEMA
     $q2 = $db->prepare('SELECT * FROM INFORMATION_SCHEMA.COLUMNS'
@@ -184,6 +185,11 @@ while($row = $q->fetch()) {
             'required' => false,
             'type' => $type
         );
+
+        $return_items[$col['COLUMN_NAME']]= array(
+            'description' => $col['COLUMN_COMMENT'],    // we'll need to make sure we add comments to tables/columns that are missing them
+            'type' => $type
+        );
     }
 
     // all the report endpoints support the basic limit/offset query parameters
@@ -191,8 +197,12 @@ while($row = $q->fetch()) {
 
     $responses = array(
         '200' => array(
-            // need to define a result type to place in the definitions section
-            'description' => "not documented (yet)"
+            'description' => $description,
+            'schema' => array(
+                'type' => 'array',
+                // for now, the report apis only return lists of records (which are basically the same as the parameters)
+                'items' => $return_items
+            )
         ),
         '404' => $generic_404
     );
@@ -207,6 +217,7 @@ while($row = $q->fetch()) {
         )
     );
 }
+
 /*
  * define definitions
  */
