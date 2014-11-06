@@ -182,6 +182,43 @@
                 }
             }
         },
+        "/reports/corporation/attendance": {
+            "get": {
+                "summary": "Corporation attendance rates",
+                "description": "Corporation attendance rates",                
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number of results (default 100)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Used in conjunction with the limit parameter to offset the results",
+                        "type": "number"
+                    }
+                ],
+                "tags": [
+                    "reports/corporation"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Corporation attendance rates",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "Corporation_Attendance"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The requested resource could not be found."
+                    }
+                }
+            }
+        },
         "/reports/corporation/budget": {
             "get": {
                 "summary": "Corporation state budget filings (Form 4A)",
@@ -957,6 +994,26 @@
 
             }
         }, 
+        "Corporation_Attendance": {
+            "properties": {
+                "corp_id": {
+                    "type": "number",
+                    "description": "School corporation ID as assigned by State of Indiana."
+                },
+                "corp_name": {
+                    "type": "string",
+                    "description": "School corporation name as registered in the State of Indiana."
+                },
+                "attendance": {
+                    "type": "number",
+                    "description": "Attendance percentage"
+                },
+                "year" : {
+                "type" : "number",
+                "description" : "Year of attendance report"
+                }
+            }
+        },         
         "School_IREAD": {
             "properties": {
                 "corp_id": {
