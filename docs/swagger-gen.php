@@ -1,4 +1,5 @@
 <?php
+require '../utils.php';
 require '../config/config.php';
 
 $db = new PDO('mysql:host='.INDIANALEARNS_DB_HOST.';dbname=indianalearns',
@@ -356,4 +357,4 @@ $swagger['definitions'] = $definitions;
 
 // $swagger['test'] = $results;
 
-echo json_encode($swagger, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+echo indent_json_string(json_encode($swagger, JSON_UNESCAPED_SLASHES));
