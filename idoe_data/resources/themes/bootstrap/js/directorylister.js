@@ -13,7 +13,7 @@ $(document).ready(function() {
         $('#file-info .filesize').text('Loading...');
 
         $.ajax({
-            url:     '/idoe_data?hash=' + path,
+            url:     '/idoe_data/index.php?hash=' + path,
             type:    'get',
             success: function(data) {
 
