@@ -1,2 +1,56 @@
 # This API could impact all of Indiana.
 ## Give it a shot.  Need some inspiration or a some examples? Check out the [Demos](/home/demos) page.
+
+~~~
+## The API
+All our data is made available through a set of simple HTTP endpoints, all located under the root URL: [http://indianalearns.info/api/v1/](http://indianalearns.info/api/v1).  You can actually visit that URL directly to see a JSON formatted listing of available reports.
+
+The `/corporations/...` and `/schools/...` endpoints provide a directory indexed with the IDOE's official identification numbers, so you can cross-reference with the rest of the API as well as any other official sources, while the `/reports/...` section has the raw numbers.
+
+Each report is documented individually below, using the awesome [Swagger](http://swagger.io) [UI](https://github.com/swagger-api/swagger-ui) to generate interactive samples to play with.
+
+## Syntax
+All reports are retrieved with a simple HTTP `GET` to one of the endpoints outlined below, with zero or more query parameters allowing you to narrow down your search.  Any of the fields in the results returned by a report can also be used as query parameters.  If, for example, we wanted to see the overall attendance records for [Blackhawk Middle School](http://indianalearns.info/api/v1/schools/107), we could do the following:
+
+```
+GET /api/v1/reports/school/attendance?school_id=107
+
+[
+ {
+  "school_id":"107",
+  "year":"2011",
+  "attendance":"96.02659463672586",
+  "row_id":"223",
+  "school_name":"Blackhawk Middle School"
+ },
+ {
+  "school_id":"107",
+  "year":"2010",
+  "attendance":"95.5725659898809",
+  "row_id":"224",
+  "school_name":"Blackhawk Middle School"
+ },
+ /* etc. */
+]
+```
+
+You'll notice that in addition to the school ID and attendance, the `year` field is also present, and can therefore be used as a query parameter.  Of course you can also use the standard `&` operator to string together multiple parameters.
+
+## Ranges
+
+We've added a special range syntax to the numerical query parameters, allowing you to ask for "every record where this parameter is more/less/in-between this value", and it uses the `...` "operator":
+
+* `?field=...50` will find every record where `field` is less than or equal to 50
+* `?field=50...` will find every record where `field` is equal to or greater than 50
+* `?field=50...75` will find every record where `field` is within the interval [50, 75] (inclusive)
+
+## Global parameters
+
+There's a few more parameters that you can use to narrow things down, the following can be used with any of the `/reports/...` endpoints:
+
+* `limit` sensibly enough will limit the number of records returned by the query
+* `offset` can be used in conjunction with `limit` to page through groups of results
+* `orderby` can be used to specify a field to sort the results by
+* `sort` can be either "ASC" or "DESC", indicating whether to order results in ascending or descending order respectively.
+
+## Endpoints

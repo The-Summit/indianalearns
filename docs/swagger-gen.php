@@ -38,8 +38,22 @@ $limit_params = array(
     array(
         'name' => 'offset',
         'in' => 'query',
-        'description' => 'Used in conjunction with the limit parameter to offset the results',
+        'description' => 'Used in conjunction with the `limit` parameter to offset the results',
         'type' => 'number',
+        'required' => false
+    ),
+    array(
+        'name' => 'orderby',
+        'in' => 'query',
+        'description' => 'Field to sort results',
+        'type' => 'string',
+        'required' => false
+    ),
+    array(
+        'name' => 'sort',
+        'in' => 'query',
+        'description' => 'Either `ASC` or `DESC` Used in conjunction with the `orderby` parameter to sort the results',
+        'type' => 'string',
         'required' => false
     )
 );
@@ -157,7 +171,7 @@ while($row = $q->fetch()) {
     $location = $row['location'];        // api endpoint
     $summary = $row['name'];
     $description = $row['description'];
-    $tags = array();
+    $tags = array('reports');
 
     $parameters = array();
     $return_items = array();
@@ -201,7 +215,7 @@ while($row = $q->fetch()) {
             'schema' => array(
                 'type' => 'array',
                 // for now, the report apis only return lists of records (which are basically the same as the parameters)
-                'items' => $return_items
+                'items' => array('properties' => $return_items )
             )
         ),
         '404' => $generic_404
@@ -223,18 +237,106 @@ while($row = $q->fetch()) {
  */
 $definitions['Corporation'] = array(
     'properties' => array(
-        'id' => array(
-            'type' => 'number',
-            'description' => 'test'
+        "id" => array(
+            "type" => "number",
+            "description" => "School corporation ID as assigned by State of Indiana."
+        ),
+        "name" => array(
+            "type" => "string",
+            "description" => "School corporation name as registered in the State of Indiana."
+        ),
+        "address" => array(
+            "type" => "string",
+            "description" => "Street address of corporation headquarters."
+        ),
+        "city" => array(
+            "type" => "string",
+            "description" => "City of corporation headquarters."
+        ),
+        "zip" => array(
+            "type" => "number",
+            "description" => "ZIP of corporation headquarters."
+        ),
+        "grade_span" => array(
+            "type" => "string",
+            "description" => "A span of grades the corporation covers, where KG = Kindergarten, PK = Pre-Kindergarten, and SP & ED = Special Education."
+        ),
+        "phone" => array(
+            "type" => "string",
+            "description" => "Phone number of corporation headquarters."
+        ),
+        "fax" => array(
+            "type" => "string",
+            "description" => "Fax of corporation headquarters."
+        ),
+        "superintendent_name" => array(
+            "type" => "string",
+            "description" => "The name of the superintendent of the corporation."
+        ),
+        "superintendent_email" => array(
+            "type" => "string",
+            "description" => "The email of the superintendent of the corporation."
+        ),
+        "gis_url" => array(
+            "type" => "string",
+            "description" => "The GIS URL for the maps.indiana.edu entry related to the corporation."
         )
     )
 );
 
 $definitions['School'] = array(
     'properties' => array(
-        'id' => array(
-            'type' => 'number',
-            'description' => 'test'
+        "id" => array(
+            "type" => "number",
+            "description" => "School ID as assigned by State of Indiana."
+        ),
+        "name" => array(
+            "type" => "string",
+            "description" => "School name as registered in the State of Indiana."
+        ),
+        "address" => array(
+            "type" => "string",
+            "description" => "Street address of school."
+        ),
+        "city" => array(
+            "type" => "string",
+            "description" => "City of school."
+        ),
+        "zip" => array(
+            "type" => "number",
+            "description" => "ZIP of school."
+        ),
+        "grade_span" => array(
+            "type" => "string",
+            "description" => "A span of grades the school covers, where KG = Kindergarten, PK = Pre-Kindergarten, and SP & ED = Special Educatio.n10"
+        ),
+        "phone" => array(
+            "type" => "string",
+            "description" => "Phone number of schol."
+        ),
+        "fax" => array(
+            "type" => "string",
+            "description" => "Fax of school."
+        ),
+        "principal_name" => array(
+            "type" => "string",
+            "description" => "The name of the principal of the shcool."
+        ),
+        "principal_email" => array(
+            "type" => "string",
+            "description" => "The email of the principal of the shcool."
+        ),
+        "gis_url" => array(
+            "type" => "string",
+            "description" => "The GIS URL for the maps.indiana.edu entry related to the school."
+        ),
+        "lat" => array(
+            "type" => "number",
+            "description" => "The latitude of the school"
+        ),
+        "lon" => array(
+            "type" => "number",
+            "description" => "The longitude of the school"
         )
     )
 );
