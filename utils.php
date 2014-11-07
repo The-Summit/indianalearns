@@ -118,9 +118,9 @@ function getTableColumns($db,$table){
 	$q = $db->prepare($sql);
 	$q->execute();
 	$arr = $q->fetchAll();
-	$ret = [];
+	$ret = array();
 	foreach($arr as $key=>$val){
-		$ret[] = $val["COLUMN_NAME"];
+		array_push($ret,$val["COLUMN_NAME"]);
 	}
 	return $ret;
 }
