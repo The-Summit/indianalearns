@@ -2,25 +2,14 @@
 {% block content %}
 {{ jumbo.jumbotron(title) }}
 <div class="container-fluid {{page}}-content">
-<ul class="col-md-6 col-md-offset-3">
+	<div class="col-md-6 col-md-offset-3">
 
-</ul>
+	</div>
 </div>
 {% endblock %}
 {% block source %}downloads.twig{% endblock %}
 {% block footer %}
 <script>
-	$.getJSON("/api/v1/reports",function(data){
-		$.each(data,function(it,entry){
-			if(entry.origin_url.indexOf("http")>-1){
-				$(".{{page}}-content ul").append("<li><a href='" + entry.origin_url + "'>" + entry.description + "</a></li>");
-			};
-		});
-	});
+	$(".{{page}}-content div").load("/idoe_data");
 </script>
-<style>
-	ul li{
-		font-size: 18px;
-	}
-</style>
 {% endblock %}
