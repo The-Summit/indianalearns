@@ -357,4 +357,10 @@ $swagger['definitions'] = $definitions;
 
 // $swagger['test'] = $results;
 
-echo indent_json_string(json_encode($swagger, JSON_UNESCAPED_SLASHES));
+// Older version of PHP don't have JSON_UNESCAPED_SLASHES or JSON_PRETTY_PRINT, apparently
+
+if(defined('JSON_UNESCAPED_SLASHES')) {
+    echo indent_json_string(json_encode($swagger, JSON_UNESCAPED_SLASHES));
+} else {
+    echo indent_json_string(json_encode($swagger));
+}
