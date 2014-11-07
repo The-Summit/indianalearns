@@ -3,7 +3,7 @@
 
 ~~~
 ## The API
-All our data is made available through a set of simple HTTP endpoints, all located under the root URL: [http://indianalearns.info/api/v1/](http://indianalearns.info/api/v1).  You can actually visit that URL directly to see a JSON formatted listing of available reports.
+All our data is made available through a set of simple HTTP endpoints, all located under the root URL: [http://indianalearns.info/api/v1/](http://indianalearns.info/api/v1/).  You can actually visit that URL directly to see a JSON formatted listing of available reports.
 
 The `/corporations/...` and `/schools/...` endpoints provide a directory indexed with the IDOE's official identification numbers, so you can cross-reference with the rest of the API as well as any other official sources, while the `/reports/...` section has the raw numbers.
 
