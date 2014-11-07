@@ -110,3 +110,28 @@ function makePage($app,$id){
 		)
 	);
 }
+function getTableColumns($db,$table){
+	$sql = 'SELECT COLUMN_NAME FROM information_schema.COLUMNS'
+		.'  WHERE TABLE_SCHEMA = \'indianalearns\''
+		.'    AND TABLE_NAME = \''.$table.'\'';
+	
+	$q = $db->prepare($sql);
+	$q->execute();
+	$arr = $q->fetchAll();
+	$ret = [];
+	foreach($arr as $key=>$val){
+		$ret[] = $val["COLUMN_NAME"];
+	}
+	return $ret;
+}
+function getOrderString($app,$table){
+	$orderby = $app->request->params('orderby');
+	$sort = $app->request->params('sort');
+	$cols = getTableColumns($app->config('db.handle'),$table);
+	$order = "";
+
+	if(array_search($orderby,$cols)){
+		$order = "ORDER BY " . $orderby . " " . $sort;
+	}
+	return $order;
+}

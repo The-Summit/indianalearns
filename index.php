@@ -62,9 +62,12 @@ $app->group('/api/v1', function() use ($app) {
 
 		$app->get('/corporations(/(:id))', function($id=null) use ($app) {
 				$db = $app->config('db.handle');
+				
+				//cannot do ORDER BY using PDO
+				$order = getOrderString($app,"directory_corporation");
 
 				if($id == null) {
-					$q = $db->prepare('SELECT * FROM indianalearns.directory_corporation LIMIT :offset,:limit');
+					$q = $db->prepare('SELECT * FROM indianalearns.directory_corporation ' . $order . ' LIMIT :offset,:limit');
 				} else {
 					$q = $db->prepare('SELECT * FROM indianalearns.directory_corporation WHERE id = :id LIMIT :offset,:limit');
 				}
@@ -82,9 +85,11 @@ $app->group('/api/v1', function() use ($app) {
 				if(empty($offset)) {
 					$offset = 0;
 				}
+
 				$q->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
 				$q->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
 
+				
 				$q->execute();
 				$results = array();
 				while($row = $q->fetch()) {
@@ -96,12 +101,13 @@ $app->group('/api/v1', function() use ($app) {
 
 					array_push($results, $row);
 				}
-
 				echo prepare_json_output($results);
 			});
 
 		$app->get('/schools(/(:id))', function($id=null) use ($app) {
 				$db = $app->config('db.handle');
+				//cannot do ORDER BY using PDO
+				$order = getOrderString($app,"directory_school");
 
 				$sql = 'SELECT * FROM indianalearns.directory_school';
 	//TODO: add better filtering (this is a quick fix)
@@ -111,7 +117,8 @@ $app->group('/api/v1', function() use ($app) {
 					$sql .= ' WHERE category = :category';
 				}
 
-				$sql .= ' LIMIT :offset,:limit';
+				$sql .= ' ' . $order . ' LIMIT :offset,:limit';
+
 				$q = $db->prepare($sql);
 				$q->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -162,7 +169,10 @@ $app->group('/api/v1', function() use ($app) {
 				}
 
 				$db = $app->config('db.handle');
-
+				
+				//cannot do ORDER BY using PDO
+				$order = getOrderString($app,$table);
+				
 				$sql = 'SELECT'
 					.'   COLUMN_NAME,'
 					.'   DATA_TYPE,'
@@ -227,7 +237,7 @@ $app->group('/api/v1', function() use ($app) {
 					$sql .= ' WHERE ';
 					$sql .= implode(' AND ', $sql_clauses);
 				}
-				$sql .= ' LIMIT :offset,:limit';
+				$sql .= ' ' . $order . ' LIMIT :offset,:limit';
 				// $sql is now complete
 
 				// prepare query object and start binding values
