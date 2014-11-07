@@ -1,0 +1,3 @@
+AddType application/octet-stream .pdf
+AddType application/vnd.ms-excel .xls
+AddType application/vnd.openxmlformats-officedocument.spreadsheetml.sheet .xlsx
