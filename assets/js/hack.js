@@ -1,6 +1,28 @@
 function render(data) {
-    console.log("rendering");
-    console.log(data);
+
+    var mapOptions = {
+        zoom: 7,
+        center: new google.maps.LatLng(39.53394716494817, -86.33931812500003),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    var map = new google.maps.Map(document.getElementById("#map-canvas"),
+                                  mapOptions);
+
+    var layer = new google.maps.FusionTablesLayer({
+        map: map,
+        heatmap: { enabled: false },
+        query: {
+            select: "col12",
+            from: "1zf_oe_OyHT_DMY9zD8wtV3joNMV0S9IC9ABsU-Q",
+            where: ""
+        },
+        options: {
+            styleId: 2,
+            templateId: 2
+        }
+    });
+
 }
 
 (function(){
@@ -29,7 +51,11 @@ function render(data) {
             }
 
             // all data loaded
-            render(records);
+            var data = [];
+            for( r in records ) {
+                data.push(records[r]);
+            }
+            render(data);
         });
     });
 })();
