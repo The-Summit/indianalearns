@@ -14,7 +14,7 @@ function add_district_circle(record) {
 
         point = new google.maps.LatLng(record.lat, record.lon);
         ratio = parseFloat(record.ratio);
-        radius = 500 * ratio;
+        radius = 300 * ratio;
 
         var circleOptions = {
             strokeColor: '#FF0000',
@@ -41,11 +41,11 @@ function add_district_circle(record) {
             });
         });
 
-        // var marker = new google.maps.Marker({
-        //     position: point,
-        //     map: map,
-        //     title: record.name + ': ' + record.ratio
-        // });
+        var marker = new google.maps.Marker({
+            position: point,
+            map: map,
+            title: record.name + '\n' + record.ratio + ' Students/Teacher'
+        });
     } else if(record.lat == null){
         // console.log("missing lat/lon for record: ");
         // console.log(record);
