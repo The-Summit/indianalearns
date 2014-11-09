@@ -2,32 +2,53 @@ var map;
 var geocoder;
 var districts_layer;
 
-var timeout = 0;
+function clamp(value, min, max) {
+    return Math.max(Math.min(value, max), min);
+}
+
 function add_district_circle(record) {
 
-    if(record.lat != null) {
+    if(record.lat != null && record.ratio != undefined) {
         // console.log("already have point for: "+record.name);
         // console.log("  "+record.lat+', ' + record.lon);
+
         point = new google.maps.LatLng(record.lat, record.lon);
+        ratio = parseFloat(record.ratio);
+        radius = 500 * ratio;
 
         var circleOptions = {
             strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
+            strokeOpacity: 0.15,
             strokeWeight: 2,
             fillColor: '#FF0000',
-            fillOpacity: 0.35,
+            fillOpacity: clamp(1 - (10/ratio), 0.01, 1.0),
 
             map: map,
             center: point,
-            radius: 16093
+            radius: radius
         };
 
         var circle = new google.maps.Circle(circleOptions);
-        var marker = new google.maps.Marker({
-            position: point,
-            map: map,
-            title: record.name
+        google.maps.event.addListener(circle, 'mouseover', function() {
+            this.setOptions({
+                fillColor: '#00FF00'
+            });
         });
+
+        google.maps.event.addListener(circle, 'mouseout', function() {
+            this.setOptions({
+                fillColor: '#FF0000'
+            });
+        });
+
+        // var marker = new google.maps.Marker({
+        //     position: point,
+        //     map: map,
+        //     title: record.name + ': ' + record.ratio
+        // });
+    } else if(record.lat == null){
+        // console.log("missing lat/lon for record: ");
+        // console.log(record);
     }
 
 }
