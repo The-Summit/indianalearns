@@ -62,7 +62,7 @@ $app->group('/api/v1', function() use ($app) {
 
 		$app->get('/corporations(/(:id))', function($id=null) use ($app) {
 				$db = $app->config('db.handle');
-				
+
 				//cannot do ORDER BY using PDO
 				$order = getOrderString($app,"directory_corporation");
 
@@ -78,7 +78,7 @@ $app->group('/api/v1', function() use ($app) {
 				}
 				$limit = $app->request->params('limit');
 				$offset = $app->request->params('offset');
-				
+
 				if(empty($limit)) {
 					$limit = 100;
 				}
@@ -89,7 +89,7 @@ $app->group('/api/v1', function() use ($app) {
 				$q->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
 				$q->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
 
-				
+
 				$q->execute();
 				$results = array();
 				while($row = $q->fetch()) {
@@ -132,7 +132,7 @@ $app->group('/api/v1', function() use ($app) {
 				}
 				$q->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
 				$q->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
-				
+
 				if($id) {
 					$q->bindValue(':id', $id);
 				}elseif($app->request->params('category')){
@@ -169,10 +169,10 @@ $app->group('/api/v1', function() use ($app) {
 				}
 
 				$db = $app->config('db.handle');
-				
+
 				//cannot do ORDER BY using PDO
 				$order = getOrderString($app,$table);
-				
+
 				$sql = 'SELECT'
 					.'   COLUMN_NAME,'
 					.'   DATA_TYPE,'

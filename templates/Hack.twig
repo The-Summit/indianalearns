@@ -1,0 +1,13 @@
+{% extends "base.twig" %}
+
+{% block content %}
+  <div style="width: 100%; text-align: center;">
+    <div id="#map-canvas" style="width:800px; height:600px; margin-left: auto; margin-right: auto">
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+  <script src="/assets/js/hack.js"/></script>
+{% endblock %}
